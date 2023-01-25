@@ -1,15 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RestartLevel : MonoBehaviour
 {
+
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.gameObject.CompareTag("Player"))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        bool stepBack = Input.GetButton("Rewind");
+        bool pause = Input.GetKeyDown(KeyCode.F);
+        bool stepForward = Input.GetKeyDown(KeyCode.E);
+
+        //if (!stepBack && !pause && !stepForward) 
+        //    Time.timeScale = 0;
+        //else 
+        //    Time.timeScale = 1;
     }
 }

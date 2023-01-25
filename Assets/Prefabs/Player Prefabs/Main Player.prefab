@@ -40,9 +40,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4872353944221454227}
+  - component: {fileID: 5799072580911327381}
   - component: {fileID: 4872353944221454236}
   - component: {fileID: -5242116302002001123}
   - component: {fileID: 3416536813776152952}
+  - component: {fileID: 5877251713039287558}
   - component: {fileID: 4872353944221454224}
   - component: {fileID: 4872353944221454225}
   - component: {fileID: 4872353944221454230}
@@ -64,7 +66,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4872353944221454233}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.35, y: -7.8000097, z: 0}
+  m_LocalPosition: {x: 62, y: -1.7566295, z: 0}
   m_LocalScale: {x: 2.1642544, y: 2.1603625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -73,6 +75,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5799072580911327381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4872353944221454233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b0c6f90646e7c94186c735b60ced5ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
 --- !u!212 &4872353944221454236
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -138,9 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerShadow: {fileID: 2035285554039916744, guid: efeeb8e3bfefc314f89837f00998f11b, type: 3}
+  mainEnemy: {fileID: 4872353944221454233, guid: 61b7828c199ba5348bd2e53020556aa7, type: 3}
   poiter: {fileID: 4642138722495624981, guid: 7a18160851ac7e04988bea1c38ccdfc8, type: 3}
-  distanceBetweenPlayers: 15
-  frictionMaterial: {fileID: 6200000, guid: f160d4f26e0a1aa41bcac80ff3183120, type: 2}
+  distanceBetweenPlayers: 50
   platformLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -164,6 +179,20 @@ MonoBehaviour:
   playerCollider: {fileID: 4872353944221454238}
   rigidbody2D: {fileID: 4872353944221454226}
   wallCheck: {fileID: 6572152240763519898}
+--- !u!114 &5877251713039287558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4872353944221454233}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec74b8b1f73d4e349ad849f6b7d09f3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recordTime: 5
+  rewindTime: 3
 --- !u!114 &4872353944221454224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,8 +207,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementController: {fileID: 4872353944221454225}
   runSpeed: 600
-  canControl: 0
-  moveRight: 1
+  canControl: 1
+  moveRight: 0
   moveLeft: 0
   doubleJump: 0
 --- !u!114 &4872353944221454225
@@ -288,7 +317,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0}
-  checkInterval: 0.1
 --- !u!1 &8330186371504804565
 GameObject:
   m_ObjectHideFlags: 0

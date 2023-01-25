@@ -1,75 +1,63 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Gameplay : MonoBehaviour
 {
     [SerializeField] private GameObject playerShadow;
+    [SerializeField] private GameObject mainEnemy;
     [SerializeField] private GameObject poiter;
     [SerializeField] private float distanceBetweenPlayers = 15f;
-    [SerializeField] private PhysicsMaterial2D frictionMaterial;
 
     [SerializeField] private LayerMask platformLayer;
     [SerializeField] private float xOffset = 1.0f;
     [SerializeField] private float yOffset = 1.0f;
     [SerializeField] private int numberOfIterationsForColliderSearch;
+    
     Vector2 newPlayerPosition;
-    // Start is called before the first frame update
+    private GameObject mainPlayer;
+
     void Start()
     {
-       }
+        mainPlayer = GameObject.FindWithTag("Player");
+        mainEnemy = GameObject.FindWithTag("Main Enemy");
+    }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         CreateShadowOfThePlayer();
     }
 
-    public void CreateNewPlayer()
+
+    public void ChangePlayers()
     {
-        Vector2 oldPlayerPosition = GameObject.FindWithTag("Player").transform.position;
+        mainPlayer = GameObject.FindWithTag("Player");
+        Vector2 oldPlayerPosition = mainPlayer.transform.position;
+
+        MoveMainPlayer(oldPlayerPosition);
+        CreateEnemy(oldPlayerPosition);
+
+    }
+    public void CreateEnemy(Vector2 oldPlayerPosition)
+    {
+
+        Instantiate(mainEnemy, oldPlayerPosition, Quaternion.identity);
+        Instantiate(poiter, oldPlayerPosition, Quaternion.identity);
 
         newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
-
-        Vector2 spawnPoint = FindPointOnCollider(newPlayerPosition);
-
-        spawnPoint = new(spawnPoint.x + xOffset, spawnPoint.y + yOffset);
-
-        Instantiate(gameObject, spawnPoint, Quaternion.identity);
-        Instantiate(poiter, spawnPoint, Quaternion.identity);
-
+        mainPlayer.transform.position = FindPointOnCollider(newPlayerPosition);
         //CreateShadowOfThePlayer();
     }
+    public void MoveMainPlayer(Vector2 oldPlayerPosition)
+    {
+        newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
+        mainPlayer.transform.position = FindPointOnCollider(newPlayerPosition);
 
+    }
 
     public void CreateShadowOfThePlayer()
     {
 
     }
 
-    
-
-
-    public void MakePlayerEnemy()
-    {
-        GameObject lastPlayer;
-        Component[] componentsToDisable;
-
-        lastPlayer = GameObject.FindGameObjectWithTag("Player");
-
-        lastPlayer.tag = "Main Enemy";
-        lastPlayer.GetComponent<Rigidbody2D>().sharedMaterial = frictionMaterial;
-        componentsToDisable = lastPlayer.GetComponents<MonoBehaviour>();
-
-        foreach (Component component in componentsToDisable)
-        {
-            Destroy(component);
-        }
-        //Destroy(lastPlayer.GetComponent<Rigidbody2D>());
-
-        //RaycastHit2D hitPlatforms = Physics2D.Raycast(transform.position, Vector2.down, 50 * 2, platformLayer);
-        //transform.position = hitPlatforms.point; 
-    }
 
     public Vector2 FindPointOnCollider(Vector2 originPoint)
     {
@@ -81,23 +69,13 @@ public class Gameplay : MonoBehaviour
         Vector2 hitPoint = originPoint;
 
 
-        //bool case_1 = false;
-        //bool case_2 = false;
-
-        //if (hit.collider != null && hit.collider.CompareTag("Platforms"))
-        //    case_1 = true;
-
-        //if (hit.collider == null)
-        //    case_2 = true;
-
-
         if (hit.collider != null && hit.collider.CompareTag("Platforms"))
         {
             Debug.Log(hit.collider.name);
             hitPoint = hit.point;
             Debug.DrawLine(originPoint, hitPoint, Color.red, 20);
 
-            return hitPoint;
+            return new(hitPoint.x + xOffset, hitPoint.y + yOffset);
         }
 
         for (int i = 0; i < numberOfIterationsForColliderSearch; i++)
@@ -107,13 +85,13 @@ public class Gameplay : MonoBehaviour
                 originPoint = new(originPoint.x - i, originPoint.y);
                 hit = Physics2D.Raycast(originPoint, direction, yLength * 2, platformLayer);
                 hitPoint = hit.point;
-                Debug.DrawLine(originPoint, hitPoint, Color.yellow, 20);
+                //Debug.DrawLine(originPoint, hitPoint, Color.yellow, 20);
             }
             else
             {
-                return hitPoint;
+                return new(hitPoint.x + xOffset, hitPoint.y + yOffset);
             }
         }
-        return hitPoint;
+        return new(hitPoint.x + xOffset, hitPoint.y + yOffset);
     }
 }

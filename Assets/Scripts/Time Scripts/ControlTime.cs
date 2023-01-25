@@ -5,7 +5,7 @@ public class ControlTime : MonoBehaviour
 {
     float timeSpeed;
 
-    Rigidbody2D rb;
+    [SerializeField] private Rigidbody2D[] rb;
 
     private bool stepBack;
     private bool pause;
@@ -26,9 +26,9 @@ public class ControlTime : MonoBehaviour
     bool wasSteppingBack = false;
     bool isPaused = false;
 
-    TimeControlled[] timeObjects;
+    [SerializeField] private TimeControlled[] timeObjects;
     int numberOfTimeObjects;
-    public List<TimeControlled> keepRunningScripts;
+    [SerializeField] private List<TimeControlled> keepRunningScripts;
 
 
     private void Awake()
@@ -38,7 +38,11 @@ public class ControlTime : MonoBehaviour
     }
     private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        for (int i = 0; i < numberOfTimeObjects; i++)
+        {
+            rb[i] = timeObjects[i].GetComponent<Rigidbody2D>();
+
+        }
         recordedData = new RecordedData[numberOfTimeObjects, recordLimitation];
 
     }
@@ -63,9 +67,12 @@ public class ControlTime : MonoBehaviour
 
     private void Rewind()
     {
+
         if (!stepBack) return;
 
         if (recordIndex <= 0) return;
+
+        RigidbodySettinds();
 
         wasSteppingBack = true;
         recordIndex--;
@@ -126,10 +133,7 @@ public class ControlTime : MonoBehaviour
         recordCount++;
         recordIndex = recordCount;
 
-        foreach (TimeControlled timeObject in timeObjects)
-        {
-            timeObject.TimeUpdate();
-        }
+        
 
     }
 
@@ -139,8 +143,6 @@ public class ControlTime : MonoBehaviour
 
         if (!isPaused)
         {
-            
-            Debug.Log("AA");
             Time.timeScale = 0;
             isPaused = true;
             foreach (TimeControlled script in keepRunningScripts)
@@ -150,9 +152,6 @@ public class ControlTime : MonoBehaviour
         }
         else if (isPaused)
         {
-
-            Debug.Log("BB");
-
             Time.timeScale = 1;
             foreach (TimeControlled script in keepRunningScripts)
             {
@@ -179,4 +178,13 @@ public class ControlTime : MonoBehaviour
 
         }
     }
+
+    private void RigidbodySettinds()
+    {
+        foreach (Rigidbody2D rb2D in rb)
+        {
+            rb2D.simulated = false;
+        }
+    }
+
 }

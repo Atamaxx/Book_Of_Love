@@ -5,15 +5,17 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private CharacterController2D movementController;
     private float horizontalMove = 0f;
+    private float horizontalInput = 0f;
     private bool jump = false;
     private bool dash = false;
     private bool startMovement = false;
 
-    [SerializeField] float runSpeed = 500f;            
+    [SerializeField] float runSpeed = 500f;
     [SerializeField] private bool canControl = true;
     [SerializeField] private bool moveRight = true;
     [SerializeField] private bool moveLeft = false;
-    [SerializeField] private bool doubleJump = false;
+    public bool anyInput = false;
+
 
 
     int jumpCount = 0;
@@ -44,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
             dash = true;
         }
 
+        if (dash || jump || horizontalInput > 0.05f)
+            anyInput = true;
+        else
+            anyInput = false;
+
     }
 
 
@@ -62,7 +69,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (canControl)
         {
-            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            horizontalMove = horizontalInput * runSpeed;
             return;
         }
 
@@ -79,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
             horizontalMove = 0f;
         }
 
-        
+
     }
 
 
