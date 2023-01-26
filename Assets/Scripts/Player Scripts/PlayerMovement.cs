@@ -10,15 +10,21 @@ public class PlayerMovement : MonoBehaviour
     private bool dash = false;
     private bool startMovement = false;
 
-    [SerializeField] float runSpeed = 500f;
+    [SerializeField] private float runSpeed = 500f;
+    [SerializeField] private float sprintMultiplier = 2f;
     [SerializeField] private bool canControl = true;
     [SerializeField] private bool moveRight = true;
     [SerializeField] private bool moveLeft = false;
     public bool anyInput = false;
 
-
+    private float startingRunSpeed;
 
     int jumpCount = 0;
+
+    private void Start()
+    {
+        startingRunSpeed = runSpeed;
+    }
 
     private void Update()
     {
@@ -32,19 +38,23 @@ public class PlayerMovement : MonoBehaviour
         HorizontalMovement();
 
         if (Input.GetButtonDown("Jump"))
-        {
             jump = true;
-        }
+
 
         if (Input.GetButtonUp("Jump"))
-        {
             movementController.OnJumpUp(movementController.m_JumpCutMultiplier);
-        }
+
+
+        if (Input.GetButtonDown("Run"))
+            runSpeed = startingRunSpeed * sprintMultiplier;
+
+        if (Input.GetButtonUp("Run"))
+            runSpeed = startingRunSpeed;
+
 
         if (Input.GetButtonDown("Dash"))
-        {
             dash = true;
-        }
+
 
         if (dash || jump || horizontalInput > 0.05f)
             anyInput = true;

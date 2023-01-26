@@ -3,187 +3,177 @@ using UnityEngine;
 
 public class ControlTime : MonoBehaviour
 {
-    float timeSpeed;
-
-    [SerializeField] private Rigidbody2D[] rb;
+    // A flag to indicate whether or not the rewind is currently active
 
     private bool stepBack;
     private bool pause;
     private bool stepForward;
 
-    public struct RecordedData
-    {
-        public Vector2 position;
-        public Vector2 velocity;
-    }
+    private bool isPaused;
 
-    RecordedData[,] recordedData;
+    //private bool rewinding;
+    [SerializeField] private float standingThreshold = 0.1f;
 
-    int recordLimitation = 100000;
-    int recordCount;
-    int recordIndex = 100000;
-
-    bool wasSteppingBack = false;
-    bool isPaused = false;
+    [SerializeField] private List<List<Vector2>> positions = new();
 
     [SerializeField] private TimeControlled[] timeObjects;
-    int numberOfTimeObjects;
-    [SerializeField] private List<TimeControlled> keepRunningScripts;
+    [SerializeField] private List<GameObject> newTimeObjects;
 
+    private GameObject player;
+
+   // int numberOfTimeObjects;
+
+    [SerializeField] private MusicController controlMusic;
+    [SerializeField] private CameraController cameraController;
+    
+    private PlayerMovement movement;
+
+    private Rigidbody2D rb;
+    public float magnitudee;
+
+
+    //bool isPaused = false;
 
     private void Awake()
     {
+
         timeObjects = FindObjectsOfType<TimeControlled>();
-        numberOfTimeObjects = timeObjects.Length;
+
+       // numberOfTimeObjects = timeObjects.Length;
+        newTimeObjects = new List<GameObject>();
+
+
     }
     private void Start()
     {
-        for (int i = 0; i < numberOfTimeObjects; i++)
+        
+        foreach (TimeControlled timeObject in timeObjects)
         {
-            rb[i] = timeObjects[i].GetComponent<Rigidbody2D>();
 
+            newTimeObjects.Add(timeObject.gameObject);
+            if (timeObject.CompareTag("Player"))
+            {
+                player = timeObject.gameObject;
+                rb = player.GetComponent<Rigidbody2D>();
+            }
+            positions.Add(new List<Vector2>());
         }
-        recordedData = new RecordedData[numberOfTimeObjects, recordLimitation];
+
+        movement = player.GetComponent<PlayerMovement>();
+
+
 
     }
-
     void Update()
     {
         stepBack = Input.GetButton("Rewind");
         pause = Input.GetKeyDown(KeyCode.F);
-        stepForward = Input.GetKeyDown(KeyCode.E);
+        stepForward = Input.GetKeyDown(KeyCode.D);
 
-        Pause();
+        PauseResumeGame();
 
     }
-
 
     private void FixedUpdate()
     {
-        Rewind();
-        FastForward();
-        NoTimeManipulation();
+
+        AllTimeOperations();
     }
 
-    private void Rewind()
-    {
 
+
+    private void AllTimeOperations()
+    {
+        int index = 0;
+
+        foreach (GameObject timeObject in newTimeObjects)
+        {
+            RecordPositions(timeObject, index);
+            RewindTransform(timeObject, index);
+            StepForward();
+            index++;
+        }
+    }
+
+    private void RecordPositions(GameObject timeObject, int index)
+    {
+        if (stepBack) return;
+        Vector3 oldPosition = timeObject.transform.position;
+        positions[index].Add(new Vector2(oldPosition.x, oldPosition.y));
+    }
+
+    private void RewindTransform(GameObject timeObject, int index)
+    {
         if (!stepBack) return;
-
-        if (recordIndex <= 0) return;
-
-        RigidbodySettinds();
-
-        wasSteppingBack = true;
-        recordIndex--;
-
-        for (int objectIndex = 0; objectIndex < numberOfTimeObjects; objectIndex++)
-        {
-            TimeControlled timeObject = timeObjects[objectIndex];
-            RecordedData data = recordedData[objectIndex, recordIndex];
-            timeObject.transform.position = data.position;
-            timeObject.velocity = data.velocity;
-        }
-    }
-
-    private void FastForward()
-    {
-        if (pause && stepForward)
-        {
-            wasSteppingBack = true;
-            if (recordIndex < recordCount - 1)
-            {
-                recordIndex++;
-                for (int objectIndex = 0; objectIndex < numberOfTimeObjects; objectIndex++)
-                {
-                    TimeControlled timeObject = timeObjects[objectIndex];
-                    RecordedData data = recordedData[objectIndex, recordIndex];
-                    timeObject.transform.position = data.position;
-                    timeObject.velocity = data.velocity;
-                }
-            }
-        }
+        if (positions[index].Count <= 1) return;
+        controlMusic.ChangeSpeed(-1);
+        OnTimeUpdate();
+        timeObject.transform.position = positions[index][^1]; // [^1] = [positions[timeObjectIndex].Count - 1];
+        positions[index].RemoveAt(positions[index].Count - 1);
     }
 
 
-
-
-    private void NoTimeManipulation()
+    private void PauseResumeGame()
     {
-        if (wasSteppingBack)
+
+        if (PauseGameConditions() && !isPaused)
         {
-            recordCount = recordIndex;
-            wasSteppingBack = false;
-            return;
+            PauseGame();
         }
+        else if (!PauseGameConditions() && isPaused)
+            ResumeGame();
+    }
 
-        if (pause || stepBack) return;
-
-
-        for (int objectIndex = 0; objectIndex < numberOfTimeObjects; objectIndex++)
-        {
-            TimeControlled timeObject = timeObjects[objectIndex];
-            RecordedData data = new()
-            {
-                position = timeObject.transform.position,
-                velocity = timeObject.velocity
-            };
-            recordedData[objectIndex, recordCount] = data;
-        }
-        recordCount++;
-        recordIndex = recordCount;
+    private void StepForward()
+    {
+        if (!stepForward) return;
 
         
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        isPaused = true;
+        controlMusic.ChangeSpeed(0);
+        Debug.Log("Paused");
 
     }
 
-    private void Pause()
+    private void ResumeGame()
     {
-        if (!pause) return;
+        Time.timeScale = 1;
+        isPaused = false;
+        Debug.Log("Resumed");
+    }
 
-        if (!isPaused)
+    private bool PauseGameConditions()
+    {
+        if (movement.anyInput)
         {
-            Time.timeScale = 0;
-            isPaused = true;
-            foreach (TimeControlled script in keepRunningScripts)
-            {
-                script.enabled = true;
-            }
+            controlMusic.ChangeSpeed(1f);
+            return false;
         }
-        else if (isPaused)
-        {
-            Time.timeScale = 1;
-            foreach (TimeControlled script in keepRunningScripts)
-            {
-                script.enabled = false;
-            }
-            isPaused = false;
-        }
+
+        if (!isPlayerStanding() || stepBack )
+            return false;
+  
+        return true;
+    }
+    private bool isPlayerStanding()
+    {
+        magnitudee = rb.velocity.magnitude;
+        if (rb.velocity.magnitude < standingThreshold)
+            return true;
+        else
+            return false;
     }
 
-    private void TimePauseExceptions()
+    private void OnTimeUpdate()
     {
-        GameObject objectExeption;
-        objectExeption = GameObject.Find("Main Player");
-        objectExeption.SetActive(true);
-    }
-
-    private void AfterSteppingBack()
-    {
-        if (wasSteppingBack)
+        foreach (TimeControlled timeObject in timeObjects)
         {
-            recordCount = recordIndex;
-            wasSteppingBack = false;
-
-
-        }
-    }
-
-    private void RigidbodySettinds()
-    {
-        foreach (Rigidbody2D rb2D in rb)
-        {
-            rb2D.simulated = false;
+            timeObject.TimeUpdate();
         }
     }
 

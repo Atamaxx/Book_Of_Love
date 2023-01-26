@@ -3,7 +3,6 @@ using UnityEngine;
 public class Gameplay : MonoBehaviour
 {
     [SerializeField] private GameObject playerShadow;
-    [SerializeField] private GameObject mainEnemy;
     [SerializeField] private GameObject poiter;
     [SerializeField] private float distanceBetweenPlayers = 15f;
 
@@ -12,8 +11,9 @@ public class Gameplay : MonoBehaviour
     [SerializeField] private float yOffset = 1.0f;
     [SerializeField] private int numberOfIterationsForColliderSearch;
     
-    Vector2 newPlayerPosition;
+    //Vector2 newPlayerPosition;
     private GameObject mainPlayer;
+    private GameObject mainEnemy;
 
     void Start()
     {
@@ -29,26 +29,21 @@ public class Gameplay : MonoBehaviour
 
     public void ChangePlayers()
     {
-        mainPlayer = GameObject.FindWithTag("Player");
         Vector2 oldPlayerPosition = mainPlayer.transform.position;
 
         MoveMainPlayer(oldPlayerPosition);
-        CreateEnemy(oldPlayerPosition);
+        MoveMainEnemy(oldPlayerPosition);
 
     }
-    public void CreateEnemy(Vector2 oldPlayerPosition)
+    public void MoveMainEnemy(Vector2 oldPlayerPosition)
     {
-
-        Instantiate(mainEnemy, oldPlayerPosition, Quaternion.identity);
-        Instantiate(poiter, oldPlayerPosition, Quaternion.identity);
-
-        newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
-        mainPlayer.transform.position = FindPointOnCollider(newPlayerPosition);
+        Vector2 newPlayerPosition = new(oldPlayerPosition.x, oldPlayerPosition.y);
+        mainEnemy.transform.position = FindPointOnCollider(newPlayerPosition);
         //CreateShadowOfThePlayer();
     }
     public void MoveMainPlayer(Vector2 oldPlayerPosition)
     {
-        newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
+        Vector2 newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
         mainPlayer.transform.position = FindPointOnCollider(newPlayerPosition);
 
     }

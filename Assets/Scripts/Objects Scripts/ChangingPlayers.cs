@@ -26,7 +26,6 @@ public class ChangingPlayers : MonoBehaviour
         if (collider2D.CompareTag("Main Enemy"))
         {
             gameplayScript.ChangePlayers();
-            Destroy(collision.gameObject);
             Destroy(gameObject);
         }
 
