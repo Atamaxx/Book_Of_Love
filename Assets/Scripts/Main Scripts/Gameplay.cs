@@ -29,6 +29,7 @@ public class Gameplay : MonoBehaviour
 
     public void ChangePlayers()
     {
+        mainPlayer = GameObject.FindWithTag("Player");
         Vector2 oldPlayerPosition = mainPlayer.transform.position;
 
         MoveMainPlayer(oldPlayerPosition);
@@ -37,6 +38,8 @@ public class Gameplay : MonoBehaviour
     }
     public void MoveMainEnemy(Vector2 oldPlayerPosition)
     {
+        mainEnemy = GameObject.FindWithTag("Main Enemy");
+
         Vector2 newPlayerPosition = new(oldPlayerPosition.x, oldPlayerPosition.y);
         mainEnemy.transform.position = FindPointOnCollider(newPlayerPosition);
         //CreateShadowOfThePlayer();
