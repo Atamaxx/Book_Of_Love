@@ -9,6 +9,7 @@ TagManager:
   - Platforms
   - Main Enemy
   - Death
+  - Absorb
   layers:
   - Default
   - TransparentFX

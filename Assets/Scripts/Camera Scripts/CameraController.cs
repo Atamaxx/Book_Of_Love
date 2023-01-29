@@ -8,56 +8,62 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float minZoom = 10.0f; // The minimum zoom level
     [SerializeField] private float maxZoom = 100.0f; // The maximum zoom level
 
-    [SerializeField] private CinemachineVirtualCamera virtualCamera; // reference to your virtual camera
+    [SerializeField] private CinemachineVirtualCamera playerCamera;
+    [SerializeField] private CinemachineVirtualCamera secondCamera;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform cameraMover;
 
-    public bool canMoveCamera;
+    public bool movingCamera;
 
     private float horizontal;
     private float vertical;
-    private float zoom;
+    [SerializeField] private float zoom;
 
     private void Start()
     {
-        virtualCamera.Follow = playerTransform;
+        playerCamera.Follow = playerTransform;
+        secondCamera.Follow = cameraMover;
     }
 
     private void Update()
     {
-
-        horizontal = Input.GetAxis("HorizontalCamera");
-        vertical = Input.GetAxis("VerticalCamera");
         zoom = Input.GetAxis("Mouse ScrollWheel");
         SwitchToCameraMovement();
     }
 
     private void FixedUpdate()
     {
-        MoveCamera();
+        //if (!movingCamera) return;
+
+        //ZoomSecondCamera();
+
     }
 
-    private void MoveCamera()
+    private void ZoomSecondCamera()
     {
-        if (!canMoveCamera) return;
-        cameraMover.transform.position += moveSpeed * Time.unscaledDeltaTime * new Vector3(horizontal, vertical, 0);
-        virtualCamera.m_Lens.FieldOfView -= zoom * zoomSpeed;
+        if (zoom > 0.05f || zoom < -0.05)
+        {
+            secondCamera.m_Lens.OrthographicSize += zoom * zoomSpeed;
+            // Clamp the camera's zoom level
+            secondCamera.m_Lens.OrthographicSize = Mathf.Clamp(secondCamera.m_Lens.FieldOfView, minZoom, maxZoom);
+        }
 
-        // Clamp the camera's zoom level
-        virtualCamera.m_Lens.FieldOfView = Mathf.Clamp(virtualCamera.m_Lens.FieldOfView, minZoom, maxZoom);
     }
 
     private void SwitchToCameraMovement()
     {
-        if (Input.GetKey(KeyCode.K) && canMoveCamera)
+        bool switchKey = Input.GetKeyDown(KeyCode.K);
+        if (switchKey && !movingCamera)
         {
-            canMoveCamera = false;
+            secondCamera.Priority = 1;
+            playerCamera.Priority = 0;
+            movingCamera = true;
         }
-
-        if (Input.GetKey(KeyCode.K))
+        else if (switchKey && movingCamera)
         {
-            virtualCamera.Follow = cameraMover;
-            canMoveCamera = true;
+            secondCamera.Priority = 0;
+            playerCamera.Priority = 1;
+            movingCamera = false;
         }
 
     }

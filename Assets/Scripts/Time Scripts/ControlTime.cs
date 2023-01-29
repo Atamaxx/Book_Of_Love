@@ -21,11 +21,12 @@ public class ControlTime : MonoBehaviour
 
     private GameObject player;
 
-   // int numberOfTimeObjects;
+    // int numberOfTimeObjects;
 
-    [SerializeField] private MusicController controlMusic;
+    //[SerializeField] private MusicController controlMusic;
     [SerializeField] private CameraController cameraController;
-    
+    [SerializeField] private ControlRigidbodies controlRb;
+
     private PlayerMovement movement;
 
     private Rigidbody2D rb;
@@ -39,14 +40,14 @@ public class ControlTime : MonoBehaviour
 
         timeObjects = FindObjectsOfType<TimeControlled>();
 
-       // numberOfTimeObjects = timeObjects.Length;
+        // numberOfTimeObjects = timeObjects.Length;
         newTimeObjects = new List<GameObject>();
 
 
     }
     private void Start()
     {
-        
+
         foreach (TimeControlled timeObject in timeObjects)
         {
 
@@ -88,7 +89,9 @@ public class ControlTime : MonoBehaviour
 
         foreach (GameObject timeObject in newTimeObjects)
         {
-            RecordPositions(timeObject, index);
+            if (!isPaused)
+                RecordPositions(timeObject, index);
+
             RewindTransform(timeObject, index);
             StepForward();
             index++;
@@ -106,7 +109,6 @@ public class ControlTime : MonoBehaviour
     {
         if (!stepBack) return;
         if (positions[index].Count <= 1) return;
-        controlMusic.ChangeSpeed(-1);
         OnTimeUpdate();
         timeObject.transform.position = positions[index][^1]; // [^1] = [positions[timeObjectIndex].Count - 1];
         positions[index].RemoveAt(positions[index].Count - 1);
@@ -128,21 +130,22 @@ public class ControlTime : MonoBehaviour
     {
         if (!stepForward) return;
 
-        
+
     }
 
     private void PauseGame()
     {
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
+        controlRb.FreezeAllObjects();
         isPaused = true;
-        controlMusic.ChangeSpeed(0);
         Debug.Log("Paused");
 
     }
 
     private void ResumeGame()
     {
-        Time.timeScale = 1;
+        controlRb.UnFreezeAllObjects();
+        //Time.timeScale = 1;
         isPaused = false;
         Debug.Log("Resumed");
     }
@@ -151,13 +154,12 @@ public class ControlTime : MonoBehaviour
     {
         if (movement.anyInput)
         {
-            controlMusic.ChangeSpeed(1f);
             return false;
         }
 
-        if (!isPlayerStanding() || stepBack )
+        if (!isPlayerStanding() || stepBack)
             return false;
-  
+
         return true;
     }
     private bool isPlayerStanding()

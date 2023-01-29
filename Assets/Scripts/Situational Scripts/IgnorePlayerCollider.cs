@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class IgnorePlayerCollider : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Collider2D playerCollider;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        Physics2D.IgnoreCollision(GetComponent<Collider2D>(), playerCollider, true);
     }
 }

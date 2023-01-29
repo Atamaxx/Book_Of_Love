@@ -7,7 +7,7 @@ public class ControlRigidbodies : MonoBehaviour
     Rigidbody2D[] rigidbodies;
     void Start()
     {
-        rigidbodies = FindObjectsOfType<Rigidbody2D>();        
+        rigidbodies = FindObjectsOfType<Rigidbody2D>();
     }
 
     public void FreezeAllObjects()
@@ -22,7 +22,7 @@ public class ControlRigidbodies : MonoBehaviour
     {
         foreach (Rigidbody2D rigidbody in rigidbodies)
         {
-            //rigidbody.Awa;
+            rigidbody.WakeUp();
         }
     }
 }

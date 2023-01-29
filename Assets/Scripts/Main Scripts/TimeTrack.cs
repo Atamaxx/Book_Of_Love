@@ -2,37 +2,74 @@ using UnityEngine;
 
 public class TimeTrack : MonoBehaviour
 {
-    [SerializeField] private Transform player; // Drag the player object here in the inspector
-    //public Transform startMarker; // Drag the start marker object here in the inspector
-    [SerializeField] private Transform endMarker; // Drag the end marker object here in the inspector
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform endMarker;
 
-    [SerializeField] private float levelDistance; // The total distance of the level
-    [SerializeField] private float currentDistance; // The current distance the player has traveled
-    public float progress; // The percentage of the level that has been passed
+    [SerializeField] private float levelDistance;
+    [SerializeField] private float currentDistance;
 
-    Vector2 startX;
+    [SerializeField] private MusicController musicController;
+
+    private float lastPlayerPosX;
+    private float playerPosX;
+    float startX;
+
+    public float playerSpeed;
+    //public float musicSpeed;
+    public float levelTime;
+    public float progress;
+
+
 
     void Start()
     {
-        startX = new(player.position.x, 0);
-        Vector2 endX = new(endMarker.position.x, 0);
+        startX = player.position.x;
+        float endX = endMarker.position.x;
 
-        levelDistance = Vector2.Distance(startX, endX);
+        levelDistance = endX - startX;
+
+        playerPosX = player.position.x;
+        lastPlayerPosX = player.position.x;
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        TrackProgress(); 
+        TrackProgress();
+        ChangeMusicSpeed();
     }
 
     private void TrackProgress()
     {
-        Vector2 playerPosX = new(player.position.x, 0);
+        float speedDistance;
+
+        playerPosX = player.position.x;
 
 
-        currentDistance = Vector2.Distance(startX, playerPosX);
-
+        currentDistance = playerPosX - startX;
         progress = currentDistance / levelDistance;
 
+        speedDistance = playerPosX - lastPlayerPosX;
+        playerSpeed = speedDistance / Time.deltaTime;
+        lastPlayerPosX = playerPosX;
+
+        levelTime = levelDistance / playerSpeed;
     }
+
+    private void ChangeMusicSpeed()
+    {
+        float musicSpeed;
+        float trackDuration = musicController.SongGuration();
+
+        //musicSpeed = trackDuration / levelTime;
+        musicSpeed = Mathf.RoundToInt(playerSpeed / 12);
+
+        if (musicSpeed == 0)
+        {
+            musicController.ChangeSpeed(0.75f);
+            return;
+        }
+
+        musicController.ChangeSpeed(musicSpeed);
+    }
+
 }

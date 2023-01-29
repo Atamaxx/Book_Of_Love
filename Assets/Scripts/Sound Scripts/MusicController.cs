@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class MusicController : MonoBehaviour
 {
-    public AudioSource musicSource; // Drag the music source here in the inspector
-    [Range(0, 10)] [SerializeField] private float speed = 1; // The speed that the music should play at
+    public AudioSource musicSource;
+    [Range(0, 10)] [SerializeField] private float speed = 1;
 
     private void Start()
     {
@@ -17,6 +17,11 @@ public class MusicController : MonoBehaviour
     public void ChangeSpeed(float newSpeed)
     {
         speed = newSpeed;
+    }
+
+    public float SongGuration()
+    {
+        return musicSource.clip.length;
     }
 
     public void Reverse()
