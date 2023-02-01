@@ -15,11 +15,16 @@ public class TimeTrack : MonoBehaviour
     float startX;
 
     public float playerSpeed;
-    //public float musicSpeed;
+    public float avarageSpeed;
     public float levelTime;
     public float progress;
 
+    [Header("Stopwatch")]
 
+    public float stopTime = 0f;
+    public float runningTime;
+    public float wholeTime;
+    public bool isStopwatchRunning = true;
 
     void Start()
     {
@@ -30,6 +35,11 @@ public class TimeTrack : MonoBehaviour
 
         playerPosX = player.position.x;
         lastPlayerPosX = player.position.x;
+    }
+
+    private void Update()
+    {
+        Stopwatch();
     }
 
     private void FixedUpdate()
@@ -52,6 +62,8 @@ public class TimeTrack : MonoBehaviour
         playerSpeed = speedDistance / Time.deltaTime;
         lastPlayerPosX = playerPosX;
 
+        avarageSpeed = currentDistance / runningTime;
+
         levelTime = levelDistance / playerSpeed;
     }
 
@@ -72,4 +84,34 @@ public class TimeTrack : MonoBehaviour
         musicController.ChangeSpeed(musicSpeed);
     }
 
+    private void Stopwatch()
+    {
+        wholeTime = Time.time;
+
+        if (isStopwatchRunning)
+        {
+            runningTime = wholeTime - stopTime;
+        }
+
+        if (!isStopwatchRunning)
+        {
+            stopTime = wholeTime - runningTime;
+        }
+    }
+   
+    //public void SetUpStopwatch()
+    //{
+    //    float time = Time.time;
+
+    //    if (isStopwatchRunning)
+    //    {
+    //        runningTime = time - startTime;
+    //    }
+    //    else
+    //    {
+    //        startTime = time - runningTime;
+    //    }
+    //}
+
+    
 }

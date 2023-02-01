@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 
-    [SerializeField] private CharacterController2D movementController;
+    [SerializeField] private MainController.CharacterController2D movementController;
     private float horizontalMove = 0f;
     private float horizontalInput = 0f;
     private bool jump = false;
@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
             dash = true;
 
 
-        if (dash || jump || horizontalInput > 0.05f)
+        if (horizontalInput > 0.05f)
             anyInput = true;
         else
             anyInput = false;

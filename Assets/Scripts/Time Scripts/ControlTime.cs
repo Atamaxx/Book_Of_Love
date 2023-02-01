@@ -9,7 +9,7 @@ public class ControlTime : MonoBehaviour
     private bool pause;
     private bool stepForward;
 
-    private bool isPaused;
+    private bool isPaused = false;
 
     //private bool rewinding;
     [SerializeField] private float standingThreshold = 0.1f;
@@ -26,6 +26,7 @@ public class ControlTime : MonoBehaviour
     //[SerializeField] private MusicController controlMusic;
     [SerializeField] private CameraController cameraController;
     [SerializeField] private ControlRigidbodies controlRb;
+    [SerializeField] private TimeTrack timeTrack;
 
     private PlayerMovement movement;
 
@@ -62,7 +63,7 @@ public class ControlTime : MonoBehaviour
 
         movement = player.GetComponent<PlayerMovement>();
 
-
+        PauseGame();
 
     }
     void Update()
@@ -93,7 +94,6 @@ public class ControlTime : MonoBehaviour
                 RecordPositions(timeObject, index);
 
             RewindTransform(timeObject, index);
-            StepForward();
             index++;
         }
     }
@@ -126,17 +126,12 @@ public class ControlTime : MonoBehaviour
             ResumeGame();
     }
 
-    private void StepForward()
-    {
-        if (!stepForward) return;
-
-
-    }
-
     private void PauseGame()
     {
-        //Time.timeScale = 0;
         controlRb.FreezeAllObjects();
+
+        timeTrack.isStopwatchRunning = false;
+
         isPaused = true;
         Debug.Log("Paused");
 
@@ -145,7 +140,9 @@ public class ControlTime : MonoBehaviour
     private void ResumeGame()
     {
         controlRb.UnFreezeAllObjects();
-        //Time.timeScale = 1;
+
+        timeTrack.isStopwatchRunning = true;
+
         isPaused = false;
         Debug.Log("Resumed");
     }
@@ -153,23 +150,21 @@ public class ControlTime : MonoBehaviour
     private bool PauseGameConditions()
     {
         if (movement.anyInput)
-        {
             return false;
-        }
 
-        if (!isPlayerStanding() || stepBack)
+        if (timeTrack.playerSpeed > 1f)
             return false;
 
         return true;
     }
-    private bool isPlayerStanding()
-    {
-        magnitudee = rb.velocity.magnitude;
-        if (rb.velocity.magnitude < standingThreshold)
-            return true;
-        else
-            return false;
-    }
+    //private bool isPlayerStanding()
+    //{
+    //    magnitudee = rb.velocity.magnitude;
+    //    if (rb.velocity.magnitude < standingThreshold)
+    //        return true;
+    //    else
+    //        return false;
+    //}
 
     private void OnTimeUpdate()
     {

@@ -42,12 +42,15 @@ GameObject:
   - component: {fileID: 4872353944221454227}
   - component: {fileID: 4872353944221454236}
   - component: {fileID: -5242116302002001123}
+  - component: {fileID: 174124860911423124}
   - component: {fileID: 3416536813776152952}
   - component: {fileID: 4872353944221454224}
   - component: {fileID: 4872353944221454225}
   - component: {fileID: 4872353944221454238}
   - component: {fileID: 4872353944221454226}
+  - component: {fileID: 4218110267646156036}
   - component: {fileID: 7326982102111884285}
+  - component: {fileID: 796718637349246012}
   m_Layer: 0
   m_Name: Main Player
   m_TagString: Player
@@ -113,7 +116,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 4203796ed09b8aa46bf94455e073531c, type: 3}
+  m_Sprite: {fileID: -1241828378, guid: 2f3220fb0ea4c8a41a3a32d1e368cd5f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,7 +148,8 @@ MonoBehaviour:
   xOffset: 0
   yOffset: 2
   numberOfIterationsForColliderSearch: 100
---- !u!114 &3416536813776152952
+  checkFlow: {fileID: 4218110267646156036}
+--- !u!114 &174124860911423124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,6 +157,21 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4872353944221454233}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98efc64a4a8a6264b887057b1fef4c0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _minImpactForce: 20
+  _landAnimDuration: 0.1
+  _attackAnimTime: 0.2
+--- !u!114 &3416536813776152952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4872353944221454233}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5292be61df54cd9469686bc5cd7ee2d8, type: 3}
   m_Name: 
@@ -258,6 +277,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &4218110267646156036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4872353944221454233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc75b5a987685642812089db1575dbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkpoints: []
 --- !u!114 &7326982102111884285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +303,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0}
+--- !u!95 &796718637349246012
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4872353944221454233}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e1b29eaa6c384f24a961b964e5837efd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &8330186371504804565
 GameObject:
   m_ObjectHideFlags: 0

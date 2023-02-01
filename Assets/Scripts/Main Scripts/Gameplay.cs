@@ -10,7 +10,8 @@ public class Gameplay : MonoBehaviour
     [SerializeField] private float xOffset = 1.0f;
     [SerializeField] private float yOffset = 1.0f;
     [SerializeField] private int numberOfIterationsForColliderSearch;
-    
+
+    [SerializeField] private CheckFlow checkFlow;
     //Vector2 newPlayerPosition;
     private GameObject mainPlayer;
     private GameObject mainEnemy;
@@ -30,24 +31,22 @@ public class Gameplay : MonoBehaviour
     public void ChangePlayers()
     {
         mainPlayer = GameObject.FindWithTag("Player");
-        Vector2 oldPlayerPosition = mainPlayer.transform.position;
+        Vector2 playerPosition = mainPlayer.transform.position;
 
-        MoveMainPlayer(oldPlayerPosition);
-        MoveMainEnemy(oldPlayerPosition);
-
+        MoveMainPlayer(playerPosition);
+        MoveMainEnemy(playerPosition);
     }
-    public void MoveMainEnemy(Vector2 oldPlayerPosition)
+    public void MoveMainEnemy(Vector2 playerPosition)
     {
         mainEnemy = GameObject.FindWithTag("Main Enemy");
-
-        Vector2 newPlayerPosition = new(oldPlayerPosition.x, oldPlayerPosition.y);
-        mainEnemy.transform.position = FindPointOnCollider(newPlayerPosition);
-        //CreateShadowOfThePlayer();
+        mainEnemy.transform.position = playerPosition;
     }
-    public void MoveMainPlayer(Vector2 oldPlayerPosition)
+    public void MoveMainPlayer(Vector2 playerPosition)
     {
-        Vector2 newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
-        mainPlayer.transform.position = FindPointOnCollider(newPlayerPosition);
+        //Vector2 newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);
+        Vector2 teleportTo = checkFlow.FindCheckpointPosition(playerPosition);
+        mainPlayer.transform.position = teleportTo;
+        checkFlow.DeactivateCheckpoints(teleportTo);
 
     }
 
