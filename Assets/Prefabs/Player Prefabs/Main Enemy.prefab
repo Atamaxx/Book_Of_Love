@@ -41,8 +41,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4872353944221454227}
   - component: {fileID: 4872353944221454236}
-  - component: {fileID: 9155229714293260641}
-  - component: {fileID: 3991208471262196899}
   - component: {fileID: 4872353944221454238}
   - component: {fileID: 4872353944221454226}
   - component: {fileID: 7326982102111884285}
@@ -122,40 +120,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &9155229714293260641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4872353944221454233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceabb625835c7c141a65d434788b6940, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameplay: {fileID: 3991208471262196899}
---- !u!114 &3991208471262196899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4872353944221454233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50d9e5221d2611f4e89a7cdaf86d539e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerShadow: {fileID: 0}
-  poiter: {fileID: 0}
-  distanceBetweenPlayers: 15
-  platformLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  xOffset: 0
-  yOffset: 2
-  numberOfIterationsForColliderSearch: 100
 --- !u!70 &4872353944221454238
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

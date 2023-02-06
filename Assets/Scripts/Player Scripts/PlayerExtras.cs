@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace MainController
@@ -9,6 +8,7 @@ namespace MainController
         public float X;
         public bool JumpDown;
         public bool JumpUp;
+        public bool Sprint;
     }
 
     public interface IPlayerController
@@ -17,8 +17,17 @@ namespace MainController
         public FrameInput Input { get; }
         public bool JumpingThisFrame { get; }
         public bool LandingThisFrame { get; }
-        public Vector3 RawMovement { get; }
+        public Vector2 RawMovement { get; }
         public bool Grounded { get; }
+       // public Vector2 InputAnim { get; }
+        //public Vector2 Speed { get; }
+        public bool Crouching { get; }
+
+        public event Action<bool, float> GroundedChanged; // Grounded - Impact force
+        public event Action Jumped;
+        public event Action Attacked;
+        public event Action Sprinting;
+
     }
 
     //public struct RayRange

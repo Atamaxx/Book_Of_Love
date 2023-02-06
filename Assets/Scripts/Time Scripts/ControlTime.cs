@@ -40,31 +40,13 @@ public class ControlTime : MonoBehaviour
     {
 
         timeObjects = FindObjectsOfType<TimeControlled>();
-
-        // numberOfTimeObjects = timeObjects.Length;
+        movement = player.GetComponent<PlayerMovement>();
         newTimeObjects = new List<GameObject>();
-
-
     }
     private void Start()
     {
-
-        foreach (TimeControlled timeObject in timeObjects)
-        {
-
-            newTimeObjects.Add(timeObject.gameObject);
-            if (timeObject.CompareTag("Player"))
-            {
-                player = timeObject.gameObject;
-                rb = player.GetComponent<Rigidbody2D>();
-            }
-            positions.Add(new List<Vector2>());
-        }
-
-        movement = player.GetComponent<PlayerMovement>();
-
+        FindAllTimeObjects();
         PauseGame();
-
     }
     void Update()
     {
@@ -83,6 +65,23 @@ public class ControlTime : MonoBehaviour
     }
 
 
+
+    #region Time Operations
+
+    private void FindAllTimeObjects()
+    {
+        foreach (TimeControlled timeObject in timeObjects)
+        {
+
+            newTimeObjects.Add(timeObject.gameObject);
+            if (timeObject.CompareTag("Player"))
+            {
+                player = timeObject.gameObject;
+                rb = player.GetComponent<Rigidbody2D>();
+            }
+            positions.Add(new List<Vector2>());
+        }
+    }
 
     private void AllTimeOperations()
     {
@@ -149,22 +148,11 @@ public class ControlTime : MonoBehaviour
 
     private bool PauseGameConditions()
     {
-        if (movement.anyInput)
-            return false;
-
-        if (timeTrack.playerSpeed > 1f)
+        if (false)
             return false;
 
         return true;
     }
-    //private bool isPlayerStanding()
-    //{
-    //    magnitudee = rb.velocity.magnitude;
-    //    if (rb.velocity.magnitude < standingThreshold)
-    //        return true;
-    //    else
-    //        return false;
-    //}
 
     private void OnTimeUpdate()
     {
@@ -174,4 +162,16 @@ public class ControlTime : MonoBehaviour
         }
     }
 
+    #endregion
+
 }
+
+
+//private bool isPlayerStanding()
+//{
+//    magnitudee = rb.velocity.magnitude;
+//    if (rb.velocity.magnitude < standingThreshold)
+//        return true;
+//    else
+//        return false;
+//}

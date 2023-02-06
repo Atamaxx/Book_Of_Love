@@ -41,8 +41,8 @@ public class PlayerMovement : MonoBehaviour
             jump = true;
 
 
-        if (Input.GetButtonUp("Jump"))
-            movementController.OnJumpUp(movementController.m_JumpCutMultiplier);
+        //if (Input.GetButtonUp("Jump"))
+        //    movementController.OnJumpUp(movementController.m_JumpCutMultiplier);
 
 
         if (Input.GetButtonDown("Run"))
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        movementController.Move(horizontalMove * Time.fixedDeltaTime, jump, dash);
+        //movementController.Move(horizontalMove * Time.fixedDeltaTime, jump, dash);
 
         jump = false;
         dash = false;
@@ -100,5 +100,6 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    
 
 }

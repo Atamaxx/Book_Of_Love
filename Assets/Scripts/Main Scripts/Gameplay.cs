@@ -14,12 +14,10 @@ public class Gameplay : MonoBehaviour
     [SerializeField] private CheckFlow checkFlow;
     //Vector2 newPlayerPosition;
     private GameObject mainPlayer;
-    private GameObject mainEnemy;
 
     void Start()
     {
         mainPlayer = GameObject.FindWithTag("Player");
-        mainEnemy = GameObject.FindWithTag("Main Enemy");
     }
 
     void FixedUpdate()
@@ -34,13 +32,8 @@ public class Gameplay : MonoBehaviour
         Vector2 playerPosition = mainPlayer.transform.position;
 
         MoveMainPlayer(playerPosition);
-        MoveMainEnemy(playerPosition);
     }
-    public void MoveMainEnemy(Vector2 playerPosition)
-    {
-        mainEnemy = GameObject.FindWithTag("Main Enemy");
-        mainEnemy.transform.position = playerPosition;
-    }
+
     public void MoveMainPlayer(Vector2 playerPosition)
     {
         //Vector2 newPlayerPosition = new(oldPlayerPosition.x - distanceBetweenPlayers, oldPlayerPosition.y);

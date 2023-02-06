@@ -1,237 +1,345 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace MainController
 {
-    public class CharacterController2D : MonoBehaviour
+    public class CharacterController2D : MonoBehaviour, IPlayerController
     {
         public Vector3 Velocity { get; private set; }
         public FrameInput Input { get; private set; }
         public bool JumpingThisFrame { get; private set; }
         public bool LandingThisFrame { get; private set; }
-        public Vector3 RawMovement { get; private set; }
+        public Vector2 RawMovement { get; private set; }
         public bool Grounded => _colDown;
 
-        public float m_JumpForce = 20f;                                             // Amount of force added when the player jumps.
-        public float m_DashForce = 20f;                                             // Amount of force added when the player dashes.
-        [SerializeField] private int m_MaxNumberOfJumps = 2;
-        [Range(0, 1)] public float m_JumpCutMultiplier = 1f;                        // Decreasing "y" velocity on releasing "jump button" for controllable jump
-        [Range(0, .3f)][SerializeField] private float m_MovementSmoothing = .05f;   // How much to smooth out the movement
-        [SerializeField] private float m_FallGravityMultiplier = 3f;
+        //public Vector2 InputAnim { get; private set; }
+        //public Vector2 Speed { get; }
+        public bool Crouching { get; }
 
-        public bool m_AirControl = false;                                           // Whether or not a player can steer while jumping;
-        public bool m_Grounded = true;                                              // Whether or not the player is grounded.
-        private bool m_FacingRight = true;                                          // For determining which way the player is currently facing.
-        private bool m_IsJumping = false;
-        bool _colDown;
-        public LayerMask m_WhatIsGround;                                            // A mask determining what is ground to the character
-        [SerializeField] private Transform m_GroundCheck;                           // A position marking where to check if the player is grounded.
-        [SerializeField] private Dash dashing;
-
-        [SerializeField] const float k_GroundedRadius = .4f;                                         // Radius of the overlap circle to determine if grounded
-        private Vector3 m_Velocity = Vector3.zero;
-        private Vector2 m_TargetVelocity;
-        private Rigidbody2D m_Rigidbody2D;
-        private float m_GravityScale;
-        private int m_CurrentJump = 0;
-        private float landingVelocityThreshold = -1f;
-
-
-        [Header("Events")]
-        [Space]
-
-        public UnityEvent OnLandEvent;
-
-        [System.Serializable]
-        public class BoolEvent : UnityEvent<bool> { }
+        public event Action<bool, float> GroundedChanged; // Grounded - Impact force
+        public event Action Jumped;
+        public event Action Attacked;
+        public event Action Sprinting;
 
 
 
-        
+
+
+        private Vector3 _lastPosition;
+        public float _currentHorizontalSpeed, _currentVerticalSpeed;
+        private Rigidbody2D _rigidbody2D;
 
         private void Awake()
         {
-            m_Rigidbody2D = GetComponent<Rigidbody2D>();
-
-            m_GravityScale = m_Rigidbody2D.gravityScale;
-
-
-            if (OnLandEvent == null)
-                OnLandEvent = new UnityEvent();
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+            Invoke(nameof(Activate), 0.5f);
+            //_playerCollider = GetComponent<Collider2D>();
         }
 
-        private void Start()
+        private bool _active;
+        void Activate() => _active = true;
+
+        private void Update()
         {
-            m_GroundCheck = transform.Find("GroundCheck").GetComponent<Transform>();
+            if (!_active) return;
+
+            // Calculate velocity
+            Velocity = (transform.position - _lastPosition) / Time.deltaTime;
+            _lastPosition = transform.position;
+
+            GatherInput();
+            RunCollisionChecks();
+
+            CalculateRun(); // Horizontal movement
+            CalculateJumpApex(); // Affects fall speed, so calculate before gravity
+            CalculateGravity(); // Vertical movement
+            CalculateJump(); // Possibly overrides vertical
+
+            MoveCharacter(); // Perform the axis movement
+            //SetAnimationValues();
         }
 
 
-        //private void Update()
-        //{
-        //    Velocity = (transform.position - _lastPosition) / Time.deltaTime;
-        //    _lastPosition = transform.position;
-        //}
+        #region Gather Input
 
-
-        public void Move(float move, bool jump, bool dash)
+        private void GatherInput()
         {
-            GroundCheck();
-            // If the input is moving the player right and the player is facing left...
-            if (move > 0 && !m_FacingRight)
+            Input = new FrameInput
             {
-                // ... flip the player.
-                Flip();
+                JumpDown = UnityEngine.Input.GetButtonDown("Jump"),
+                JumpUp = UnityEngine.Input.GetButtonUp("Jump"),
+                X = UnityEngine.Input.GetAxisRaw("Horizontal"),
+                Sprint = UnityEngine.Input.GetButton("Sprint")
+            };
+            if (Input.JumpDown)
+            {
+                _lastJumpPressed = Time.time;
             }
-            // Otherwise if the input is moving the player left and the player is facing right...
-            else if (move < 0 && m_FacingRight)
+        }
+
+        #endregion
+
+        #region Run
+
+        [Header("RUNNING")]
+
+        [SerializeField] private float _acceleration = 90;
+        [SerializeField] private float _moveClamp = 13;
+        [SerializeField] private float _deAcceleration = 60f;
+        [SerializeField] private float _apexBonus = 2;
+        [SerializeField] private float _sprintMultiplier = 2;
+
+        [SerializeField] private bool _noAcceleration = true;
+
+        private void CalculateRun()
+        {
+            if (Input.X != 0)
             {
-                // ... flip the player.
-                Flip();
+                if (Input.Sprint)
+                {
+                    Sprinting?.Invoke();
+                    // Set horizontal sprint speed
+                    _currentHorizontalSpeed += _sprintMultiplier * Input.X * _acceleration * Time.deltaTime;
+
+                    // clamped by max frame movement
+                    _currentHorizontalSpeed = Mathf.Clamp(_currentHorizontalSpeed, -_moveClamp * _sprintMultiplier, _moveClamp * _sprintMultiplier);
+                }
+                else
+                {
+                    // Set horizontal move speed
+                    _currentHorizontalSpeed += Input.X * _acceleration * Time.deltaTime;
+
+                    // clamped by max frame movement
+                    _currentHorizontalSpeed = Mathf.Clamp(_currentHorizontalSpeed, -_moveClamp, _moveClamp);
+                }
+
+                // Apply bonus at the apex of a jump
+                var apexBonus = Mathf.Sign(Input.X) * _apexBonus * _apexPoint;
+                _currentHorizontalSpeed += apexBonus * Time.deltaTime;
             }
-
-
-            // If the player should jump...
-            if ((m_Grounded || m_CurrentJump < m_MaxNumberOfJumps) && jump)
+            else if (_noAcceleration)
             {
-                m_CurrentJump++;
-                OnSecondJump();
-                m_Grounded = false;
-                m_IsJumping = true;
-                Jump(m_JumpForce);
-            }
-
-            #region Jump Gravity
-            if (m_Rigidbody2D.velocity.y < 0)
-            {
-                m_Rigidbody2D.gravityScale = m_GravityScale * m_FallGravityMultiplier;
+                _currentHorizontalSpeed = 0;
             }
             else
             {
-                m_Rigidbody2D.gravityScale = m_GravityScale;
-            }
-            #endregion
-
-            if (dash)
-            {
-                if (!dashing.DashThoughWalls(m_WhatIsGround))
-                {
-                    PerfomDash(m_DashForce);
-                }
-
+                // No input. Let's slow the character down
+                _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * Time.deltaTime);
             }
 
-
-
-
-            // Move the character by finding the target velocity
-            m_TargetVelocity.Set(move, m_Rigidbody2D.velocity.y);
-            // And then smoothing it out and applying it to the character
-            m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, m_TargetVelocity, ref m_Velocity, m_MovementSmoothing);
-            // m_Rigidbody2D.velocity = m_TargetVelocity;
-
+            //if (_currentHorizontalSpeed > 0 && _colRight && _facingRight || _currentHorizontalSpeed < 0 && _colLeft && !_facingRight)
+            //{
+            //    // Don't walk through walls
+            //    Debug.Log("Side Col");
+            //    _currentHorizontalSpeed = 0;
+            //}
 
 
         }
 
-        private void OnSecondJump()
-        {
-            if (m_CurrentJump <= 1) return;
-
-            m_Rigidbody2D.velocity = new(m_Rigidbody2D.velocity.x, 0);
-        }
-
-        private void Flip()
-        {
-            // Switch the way the player is labelled as facing.
-            m_FacingRight = !m_FacingRight;
-
-            // Multiply the player's x local scale by -1.
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
-        }
+        #endregion
 
         #region Jump
-        public void Jump(float jumpForce)
+
+        [Header("JUMPING")]
+        [SerializeField] private float _jumpHeight = 30;
+        [SerializeField] private int _numberOfJumps = 2;
+        [SerializeField] private float _jumpApexThreshold = 10f;
+        [SerializeField] private float _coyoteTimeThreshold = 0.1f;
+        [SerializeField] private float _jumpBuffer = 0.1f;
+        [SerializeField] private float _jumpEndEarlyGravityModifier = 3;
+        private bool _coyoteUsable;
+        private bool _endedJumpEarly = true;
+        private float _apexPoint; // Becomes 1 at the apex of a jump
+        private float _lastJumpPressed;
+        private int _currentJump;
+        private bool CanUseCoyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
+        private bool HasBufferedJump => _colDown && _lastJumpPressed + _jumpBuffer > Time.time;
+
+        private void CalculateJumpApex()
         {
-            //apply force, using impluse force mode
-            m_Rigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-        }
-        public void OnJumpUp(float jumpCutMultiplier)
-        {
-            if (m_Rigidbody2D.velocity.y > 0 && m_AirControl && m_IsJumping)
+            if (!_colDown)
             {
-                //reduces current y velocity by amount (0 - 1)
-                m_Rigidbody2D.AddForce(jumpCutMultiplier * m_Rigidbody2D.velocity.y * Vector2.down, ForceMode2D.Impulse);
+                // Gets stronger the closer to the top of the jump
+                _apexPoint = Mathf.InverseLerp(_jumpApexThreshold, 0, Mathf.Abs(Velocity.y));
+                _fallSpeed = Mathf.Lerp(_minFallSpeed, _maxFallSpeed, _apexPoint);
+            }
+            else
+            {
+                _apexPoint = 0;
             }
         }
 
-        //private void WhileJumping()
-        //{
-        //    if (!m_IsJumping) return;
-
-        //    #region Jump Gravity
-        //    if (m_Rigidbody2D.velocity.y < 0)
-        //    {
-        //        m_Rigidbody2D.gravityScale = m_GravityScale * m_FallGravityMultiplier;
-        //    }
-        //    else
-        //    {
-        //        m_Rigidbody2D.gravityScale = m_GravityScale;
-        //    }
-        //    #endregion
-        //}
-        #endregion
-
-        #region Dash
-
-        private void PerfomDash(float dashForce)
+        private void CalculateJump()
         {
-            if (m_FacingRight)
+            // Jump if: grounded or within coyote threshold || sufficient jump buffer
+            if (HasBufferedJump)
             {
-                m_Rigidbody2D.AddForce(Vector2.right * dashForce, ForceMode2D.Impulse);
+                Debug.Log("HasBufferedJump");
+
+                _currentVerticalSpeed = _jumpHeight;
+                _endedJumpEarly = false;
+                //_coyoteUsable = false;
+                _timeLeftGrounded = float.MinValue;
+                JumpingThisFrame = true;
+                _currentJump = 1;
+            }
+            else if (Input.JumpDown && CanUseCoyote)
+            {
+                Debug.Log("Coyote");
+
+                _currentVerticalSpeed = _jumpHeight;
+                _endedJumpEarly = false;
+                _coyoteUsable = false;
+                //_timeLeftGrounded = float.MinValue;
+                JumpingThisFrame = true;
+                _currentJump = 1;
+            }
+            else if (Input.JumpDown && _currentJump < _numberOfJumps)
+            {
+                Debug.Log("Second Jump");
+                _currentVerticalSpeed = _jumpHeight;
+                _endedJumpEarly = false;
+                _coyoteUsable = false;
+                JumpingThisFrame = true;
+                _currentJump++;
+            }
+            else
+            {
+                JumpingThisFrame = false;
             }
 
-            if (!m_FacingRight)
+            // End the jump early if button released
+            if (!_colDown && Input.JumpUp && !_endedJumpEarly && Velocity.y > 0)
             {
-                m_Rigidbody2D.AddForce(Vector2.left * dashForce, ForceMode2D.Impulse);
+                // _currentVerticalSpeed = 0;
+                _endedJumpEarly = true;
             }
-        }
 
-        #endregion
-
-        #region When You Are Butters
-        public void WhenGrounded()
-        {
-            m_IsJumping = false;
-            m_CurrentJump = 0;
-        }
-
-        private void GroundCheck()
-        {
-            bool wasGrounded;
-            wasGrounded = m_Grounded;
-
-            m_Grounded = Physics2D.OverlapCircle(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-
-            //if (!wasGrounded && m_Grounded)
-            //    OnLandEvent.Invoke();
-            if (m_Grounded)
+            if (_colUp)
             {
-                if (m_Rigidbody2D.velocity.y <= landingVelocityThreshold)
+                if (_currentVerticalSpeed > 0)
                 {
-                    OnLandEvent.Invoke();
+                    Debug.Log("_ColUp");
+                    _currentVerticalSpeed = 0;
                 }
-
             }
         }
 
         #endregion
 
+
+        #region Gravity
+
+        [Header("GRAVITY")][SerializeField] private float _fallClamp = -40f;
+        [SerializeField] private float _minFallSpeed = 80f;
+        [SerializeField] private float _maxFallSpeed = 120f;
+        private float _fallSpeed;
+
+        private void CalculateGravity()
+        {
+            if (_colDown)
+            {
+                // Move out of the ground
+                if (_currentVerticalSpeed < 0)
+                {
+                    Debug.Log("_ColDown");
+                    _currentVerticalSpeed = 0;
+
+                }
+            }
+            else
+            {
+                // Add downward force while ascending if we ended the jump early
+                var fallSpeed = _endedJumpEarly && _currentVerticalSpeed > 0 ? _fallSpeed * _jumpEndEarlyGravityModifier : _fallSpeed;
+
+                // Fall
+                _currentVerticalSpeed -= fallSpeed * Time.deltaTime;
+
+                // Clamp
+                if (_currentVerticalSpeed < _fallClamp) _currentVerticalSpeed = _fallClamp;
+            }
+        }
+
+        #endregion
+
+
+        #region Collisions
+
+        [Header("COLLISION")]
+
+        //[SerializeField] private Bounds _characterBounds;
+
+        [SerializeField] private LayerMask _groundLayer;
+
+        [SerializeField] private Transform _groundCheck;
+        [SerializeField] float _groundedRadius = .4f;
+
+        [SerializeField] private Transform _celingCheck;
+
+
+
+        [SerializeField][Range(0.1f, 0.3f)] private float _rayBuffer = 0.1f;
+
+
+
+
+        private float _timeLeftGrounded;
+        private bool _colDown, _colUp;
+
+
+        private void RunCollisionChecks()
+        {
+            // Ground
+            LandingThisFrame = false;
+            var groundedCheck = Physics2D.OverlapCircle(_groundCheck.position, _groundedRadius, _groundLayer);
+            float _impactForce;
+
+            if (_colDown && !groundedCheck)
+            {
+                _timeLeftGrounded = Time.time; // Only trigger when first leaving
+                _impactForce = 0;
+                GroundedChanged?.Invoke(groundedCheck, _impactForce);
+
+            }
+            else if (!_colDown && groundedCheck)
+            {
+                Debug.Log("_coyoteUsable");
+                _coyoteUsable = true; // Only trigger when first touching
+                LandingThisFrame = true;
+
+                _impactForce = _currentVerticalSpeed;
+                GroundedChanged?.Invoke(groundedCheck, _impactForce);
+            }
+
+            _colDown = groundedCheck;
+
+            // Ceiling
+            RaycastHit2D hitUp = Physics2D.Raycast(_celingCheck.position, Vector2.up, _rayBuffer, _groundLayer);
+            _colUp = hitUp;
+        }
+
+        #endregion
+
+
+        #region Move
+
+        private void MoveCharacter()
+        {
+            RawMovement = new Vector2(_currentHorizontalSpeed, _currentVerticalSpeed); // Used externally
+
+            _rigidbody2D.velocity = RawMovement;
+        }
+
+        #endregion
+
+
+ 
         private void OnDrawGizmos()
         {
-            Gizmos.DrawWireSphere(m_GroundCheck.position, k_GroundedRadius);
+            Gizmos.DrawWireSphere(_groundCheck.position, _groundedRadius);
+
+            Debug.DrawRay(_celingCheck.position, _rayBuffer * Vector2.up, Color.blue);
         }
     }
 }

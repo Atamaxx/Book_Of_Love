@@ -24,7 +24,7 @@ public class ChangingPlayers : MonoBehaviour
 
         if (collider2D.CompareTag("Main Enemy"))
         {
-            gameplayScript.ChangePlayers();
+            //gameplayScript.ChangePlayers();
         }
 
         //if (collider2D.CompareTag("Platforms"))
