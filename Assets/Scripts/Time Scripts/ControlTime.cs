@@ -3,65 +3,34 @@ using UnityEngine;
 
 public class ControlTime : MonoBehaviour
 {
-    // A flag to indicate whether or not the rewind is currently active
+    [SerializeField] private TimeControlled[] _timeControlledObjects;
+    [SerializeField] private List<GameObject> _timeGameObjects;
 
-    private bool stepBack;
-    private bool pause;
-    private bool stepForward;
+    //private GameObject player;
 
-    private bool isPaused = false;
+    [SerializeField] private TimeTrack _timeTrack;
 
-    //private bool rewinding;
-    [SerializeField] private float standingThreshold = 0.1f;
-
-    [SerializeField] private List<List<Vector2>> positions = new();
-
-    [SerializeField] private TimeControlled[] timeObjects;
-    [SerializeField] private List<GameObject> newTimeObjects;
-
-    private GameObject player;
-
-    // int numberOfTimeObjects;
-
-    //[SerializeField] private MusicController controlMusic;
-    [SerializeField] private CameraController cameraController;
-    [SerializeField] private ControlRigidbodies controlRb;
-    [SerializeField] private TimeTrack timeTrack;
-
-    private PlayerMovement movement;
-
-    private Rigidbody2D rb;
-    public float magnitudee;
+    private Rigidbody2D _rb;
 
 
     //bool isPaused = false;
 
     private void Awake()
     {
-
-        timeObjects = FindObjectsOfType<TimeControlled>();
-        movement = player.GetComponent<PlayerMovement>();
-        newTimeObjects = new List<GameObject>();
+        _timeControlledObjects = FindObjectsOfType<TimeControlled>();
+        _timeGameObjects = new List<GameObject>();
     }
     private void Start()
     {
         FindAllTimeObjects();
-        PauseGame();
     }
     void Update()
     {
-        stepBack = Input.GetButton("Rewind");
-        pause = Input.GetKeyDown(KeyCode.F);
-        stepForward = Input.GetKeyDown(KeyCode.D);
-
-        PauseResumeGame();
 
     }
 
     private void FixedUpdate()
     {
-
-        AllTimeOperations();
     }
 
 
@@ -70,93 +39,22 @@ public class ControlTime : MonoBehaviour
 
     private void FindAllTimeObjects()
     {
-        foreach (TimeControlled timeObject in timeObjects)
+        foreach (TimeControlled timeObject in _timeControlledObjects)
         {
-
-            newTimeObjects.Add(timeObject.gameObject);
-            if (timeObject.CompareTag("Player"))
-            {
-                player = timeObject.gameObject;
-                rb = player.GetComponent<Rigidbody2D>();
-            }
-            positions.Add(new List<Vector2>());
+            _timeGameObjects.Add(timeObject.gameObject);
         }
     }
 
-    private void AllTimeOperations()
-    {
-        int index = 0;
-
-        foreach (GameObject timeObject in newTimeObjects)
-        {
-            if (!isPaused)
-                RecordPositions(timeObject, index);
-
-            RewindTransform(timeObject, index);
-            index++;
-        }
-    }
-
-    private void RecordPositions(GameObject timeObject, int index)
-    {
-        if (stepBack) return;
-        Vector3 oldPosition = timeObject.transform.position;
-        positions[index].Add(new Vector2(oldPosition.x, oldPosition.y));
-    }
-
-    private void RewindTransform(GameObject timeObject, int index)
-    {
-        if (!stepBack) return;
-        if (positions[index].Count <= 1) return;
-        OnTimeUpdate();
-        timeObject.transform.position = positions[index][^1]; // [^1] = [positions[timeObjectIndex].Count - 1];
-        positions[index].RemoveAt(positions[index].Count - 1);
-    }
 
 
-    private void PauseResumeGame()
-    {
 
-        if (PauseGameConditions() && !isPaused)
-        {
-            PauseGame();
-        }
-        else if (!PauseGameConditions() && isPaused)
-            ResumeGame();
-    }
 
-    private void PauseGame()
-    {
-        controlRb.FreezeAllObjects();
 
-        timeTrack.isStopwatchRunning = false;
 
-        isPaused = true;
-        Debug.Log("Paused");
-
-    }
-
-    private void ResumeGame()
-    {
-        controlRb.UnFreezeAllObjects();
-
-        timeTrack.isStopwatchRunning = true;
-
-        isPaused = false;
-        Debug.Log("Resumed");
-    }
-
-    private bool PauseGameConditions()
-    {
-        if (false)
-            return false;
-
-        return true;
-    }
 
     private void OnTimeUpdate()
     {
-        foreach (TimeControlled timeObject in timeObjects)
+        foreach (TimeControlled timeObject in _timeControlledObjects)
         {
             timeObject.TimeUpdate();
         }
@@ -174,4 +72,74 @@ public class ControlTime : MonoBehaviour
 //        return true;
 //    else
 //        return false;
+//}
+
+//private void AllTimeOperations()
+//{
+//    int index = 0;
+
+//    foreach (GameObject timeObject in newTimeObjects)
+//    {
+//        if (!isPaused)
+//            RecordPositions(timeObject, index);
+
+//        RewindTransform(timeObject, index);
+//        index++;
+//    }
+//}
+
+//private void RecordPositions(GameObject timeObject, int index)
+//{
+//    if (stepBack) return;
+//    Vector3 oldPosition = timeObject.transform.position;
+//    positions[index].Add(new Vector2(oldPosition.x, oldPosition.y));
+//}
+
+//private void RewindTransform(GameObject timeObject, int index)
+//{
+//    if (!stepBack) return;
+//    if (positions[index].Count <= 1) return;
+//    OnTimeUpdate();
+//    timeObject.transform.position = positions[index][^1]; // [^1] = [positions[timeObjectIndex].Count - 1];
+//    positions[index].RemoveAt(positions[index].Count - 1);
+//}
+
+//private void PauseGame()
+//{
+//    controlRb.FreezeAllObjects();
+
+//    timeTrack.isStopwatchRunning = false;
+
+//    isPaused = true;
+//    Debug.Log("Paused");
+
+//}
+
+//private void ResumeGame()
+//{
+//    controlRb.UnFreezeAllObjects();
+
+//    timeTrack.isStopwatchRunning = true;
+
+//    isPaused = false;
+//    Debug.Log("Resumed");
+//}
+
+//private bool PauseGameConditions()
+//{
+//    if (false)
+//        return false;
+
+//    return true;
+//}
+
+//private void PauseResumeGame()
+//{
+
+//    if (PauseGameConditions() && !isPaused)
+//    {
+//        PauseGame();
+//    }
+//    else if (!PauseGameConditions() && isPaused)
+//        ResumeGame();
 //}

@@ -68,8 +68,11 @@ public class TimeTrack : MonoBehaviour
     #region Time Line
 
     [Header("Time Line")]
-    [SerializeField] private float _trackPercentage;
     [SerializeField] private float _trackLength;
+    // [field: SerializeField] public float TrackPercentage { get; private set; }
+    public static float TrackPercentage;
+
+    // [SerializeField] private float _trackPercentage;
     [SerializeField] private float _trackPassed;
     [SerializeField] private float _lastTrackPercentage;
     [SerializeField] private float _timeGap;
@@ -117,19 +120,19 @@ public class TimeTrack : MonoBehaviour
     {
         // Calculate percentage of track passed
         float trackGap;
-        _lastTrackPercentage = _trackPercentage;
+        _lastTrackPercentage = TrackPercentage;
 
-        _trackPercentage = 0;
+        TrackPercentage = 0;
 
         // If we reached extreme points
         if (_closestPoint == _trackPoints[0])
         {
-            _trackPercentage = 0;
+            TrackPercentage = 0;
             return;
         }
         else if (_closestPoint == _trackPoints[^1])
         {
-            _trackPercentage = 1;
+            TrackPercentage = 1;
             return;
         }
 
@@ -140,11 +143,11 @@ public class TimeTrack : MonoBehaviour
 
             if (IsPointBetweenTwoOthers(point1, _closestPoint, point2))
             {
-                _trackPercentage += Vector2.Distance(point1, _closestPoint) / _trackLength;
+                TrackPercentage += Vector2.Distance(point1, _closestPoint) / _trackLength;
 
                 // Fill time gap
-                trackGap = _trackPercentage - _lastTrackPercentage;
-                _trackPassed = _trackPercentage * _trackLength;
+                trackGap = TrackPercentage - _lastTrackPercentage;
+                _trackPassed = TrackPercentage * _trackLength;
 
                 if (trackGap > _timeGapThreshold)
                     _timeGap = trackGap * _trackLength;
@@ -152,10 +155,12 @@ public class TimeTrack : MonoBehaviour
             }
             else
             {
-                _trackPercentage += Vector2.Distance(point1, point2) / _trackLength;
-                _trackPassed = _trackPercentage * _trackLength;
+                TrackPercentage += Vector2.Distance(point1, point2) / _trackLength;
+                _trackPassed = TrackPercentage * _trackLength;
             }
         }
+       // _trackPercentage = TrackPercentage;
+
     }
 
  
@@ -338,13 +343,13 @@ public class TimeTrack : MonoBehaviour
 //        {
 //            currentPoint = startPoint + (diff * i);
 //            if (goRight)
-//                _trackPercentage += Vector2.Distance(startPoint, currentPoint) / _trackLength;
-//            else _trackPercentage -= Vector2.Distance(startPoint, currentPoint) / _trackLength;
+//                TrackPercentage += Vector2.Distance(startPoint, currentPoint) / _trackLength;
+//            else TrackPercentage -= Vector2.Distance(startPoint, currentPoint) / _trackLength;
 
 //            Debug.DrawLine(playerPos, currentPoint, Color.green, 1f);
 //            yield return null;
 //        }
-//        _trackPercentage = _lastTrackPercentage;
+//        TrackPercentage = _lastTrackPercentage;
 //    }
 
 //}

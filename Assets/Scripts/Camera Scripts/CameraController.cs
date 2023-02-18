@@ -3,7 +3,7 @@ using Cinemachine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10.0f; // The speed at which the camera moves
+    //[SerializeField] private float moveSpeed = 10.0f; // The speed at which the camera moves
     [SerializeField] private float zoomSpeed = 10.0f; // The speed at which the camera zooms
     [SerializeField] private float minZoom = 10.0f; // The minimum zoom level
     [SerializeField] private float maxZoom = 100.0f; // The maximum zoom level

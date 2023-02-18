@@ -5,6 +5,7 @@ namespace MainController
 {
     public class CharacterController2D : MonoBehaviour, IPlayerController
     {
+        public static CharacterController2D PlayerInstance { get; private set; }
         public Vector3 Velocity { get; private set; }
         public FrameInput Input { get; private set; }
         public bool JumpingThisFrame { get; private set; }
@@ -41,6 +42,7 @@ namespace MainController
 
         private void Update()
         {
+
             if (!_active) return;
 
             // Calculate velocity
@@ -149,7 +151,7 @@ namespace MainController
         [SerializeField] private float _jumpBuffer = 0.1f;
         [SerializeField] private float _jumpEndEarlyGravityModifier = 3;
         private bool _coyoteUsable;
-        private bool _endedJumpEarly = true;
+        [SerializeField] private bool _endedJumpEarly = true;
         private float _apexPoint; // Becomes 1 at the apex of a jump
         private float _lastJumpPressed;
         private int _currentJump;
@@ -243,7 +245,6 @@ namespace MainController
                 // Move out of the ground
                 if (_currentVerticalSpeed < 0)
                 {
-                    Debug.Log("_ColDown");
                     _currentVerticalSpeed = 0;
 
                 }
@@ -275,7 +276,7 @@ namespace MainController
         [SerializeField] private Transform _groundCheck;
         [SerializeField] float _groundedRadius = .4f;
 
-        [SerializeField] private Transform _celingCheck;
+        [SerializeField] private Transform _ceilingCheck;
 
 
 
@@ -315,7 +316,7 @@ namespace MainController
             _colDown = groundedCheck;
 
             // Ceiling
-            RaycastHit2D hitUp = Physics2D.Raycast(_celingCheck.position, Vector2.up, _rayBuffer, _groundLayer);
+            RaycastHit2D hitUp = Physics2D.Raycast(_ceilingCheck.position, Vector2.up, _rayBuffer, _groundLayer);
             _colUp = hitUp;
         }
 
@@ -339,7 +340,7 @@ namespace MainController
         {
             Gizmos.DrawWireSphere(_groundCheck.position, _groundedRadius);
 
-            Debug.DrawRay(_celingCheck.position, _rayBuffer * Vector2.up, Color.blue);
+            Debug.DrawRay(_ceilingCheck.position, _rayBuffer * Vector2.up, Color.blue);
         }
     }
 }

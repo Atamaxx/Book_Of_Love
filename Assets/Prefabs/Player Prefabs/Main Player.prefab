@@ -109,9 +109,8 @@ GameObject:
   - component: {fileID: 174124860911423124}
   - component: {fileID: 4872353944221454238}
   - component: {fileID: 4872353944221454226}
-  - component: {fileID: 7326982102111884285}
   - component: {fileID: 796718637349246012}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -213,6 +212,7 @@ MonoBehaviour:
   _coyoteTimeThreshold: 0.1
   _jumpBuffer: 0.1
   _jumpEndEarlyGravityModifier: 3
+  _endedJumpEarly: 1
   _fallClamp: -40
   _minFallSpeed: 80
   _maxFallSpeed: 120
@@ -221,7 +221,7 @@ MonoBehaviour:
     m_Bits: 64
   _groundCheck: {fileID: 4872353944000341356}
   _groundedRadius: 0.21
-  _celingCheck: {fileID: 6572152240763519898}
+  _ceilingCheck: {fileID: 6572152240763519898}
   _rayBuffer: 0.1
 --- !u!114 &174124860911423124
 MonoBehaviour:
@@ -251,8 +251,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.02350152, y: -0.03695177}
-  m_Size: {x: 0.29570124, y: 1.3236536}
+  m_Offset: {x: 0.02350152, y: -0.011674371}
+  m_Size: {x: 0.29570124, y: 1.3742086}
   m_Direction: 0
 --- !u!50 &4872353944221454226
 Rigidbody2D:
@@ -275,19 +275,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7326982102111884285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4872353944221454233}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!95 &796718637349246012
 Animator:
   serializedVersion: 5
@@ -365,7 +352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8330186371504804565}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0503502, y: 0.84335095, z: -0.4281223}
+  m_LocalPosition: {x: -1.0503502, y: 0.725, z: -0.4281223}
   m_LocalScale: {x: 2.1642544, y: 2.1603622, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

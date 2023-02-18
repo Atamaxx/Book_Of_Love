@@ -4,7 +4,7 @@ public class Gameplay : MonoBehaviour
 {
     [SerializeField] private GameObject playerShadow;
     [SerializeField] private GameObject poiter;
-    [SerializeField] private float distanceBetweenPlayers = 15f;
+    //[SerializeField] private float distanceBetweenPlayers = 15f;
 
     [SerializeField] private LayerMask platformLayer;
     [SerializeField] private float xOffset = 1.0f;
