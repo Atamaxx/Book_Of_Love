@@ -3,10 +3,10 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform _target;
-    [SerializeField] private Vector2 _targetPos;
-    [SerializeField] private LineOfSight _lineOfSight;
+    private Vector2 _targetPos;
+    private LineOfSight _lineOfSight;
     private Rigidbody2D _rigidbody2D;
-    public bool FacingRight;
+    private bool _facingRight;
     private float _currentHorizontalSpeed, _currentVerticalSpeed;
 
     #region Run
@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour
 
     public float CalculateRun()
     {
-        if (FacingRight)
+        if (_facingRight)
         {
             _currentHorizontalSpeed += _acceleration * Time.deltaTime;
         }
@@ -54,21 +54,12 @@ public class EnemyController : MonoBehaviour
     #region Jump
 
     [Header("JUMPING")]
-    [SerializeField] private float _jumpHeight = 30;
+    [SerializeField] private PreciseJump _preciseJump;
 
-    public float CalculateJump()
+    public void Jump()
     {
-        _currentVerticalSpeed = _jumpHeight;
-
-        if (_colUp)
-        {
-            if (_currentVerticalSpeed > 0)
-            {
-                _currentVerticalSpeed = 0;
-            }
-        }
-
-        return _currentVerticalSpeed;
+        _preciseJump.SetUpJump(_rigidbody2D, _groundCheck.position, JumpPoint);
+        MoveCharacter(_preciseJump.CalculateVelocity());
     }
     #endregion
 
@@ -80,7 +71,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private LayerMask _groundLayer, _sideCheckLayer;
     [SerializeField] private Transform _groundCheck, _gapCheck, _ceilingCheck, _sideCheck;
 
-    [SerializeField][Range(0.1f, 5f)] private float _upRayBuffer, _gapRayBuffer, _sideABuffer, _sideBBuffer;
+    [SerializeField][Range(0.1f, 15f)] private float _upRayBuffer, _gapRayBuffer, _sideABuffer, _sideBBuffer;
 
     [SerializeField] private bool _colDown, _colUp;
     [SerializeField] private bool _colWall, _colTarget, _colEnemy;
@@ -102,19 +93,21 @@ public class EnemyController : MonoBehaviour
     private void GapCollisions()
     {
         RaycastHit2D hitGap = Physics2D.Raycast(_gapCheck.position, Vector2.down, _gapRayBuffer, _groundLayer);
+        _colGapDown = hitGap;
 
-        if (hitGap || Physics2D.OverlapCircle(_gapCheck.position, _groundedRadius, _groundLayer))
-        {
-            _colGap = true;
-        }
-        else
-            _colGap = false;
+        _colGap = Physics2D.OverlapCircle(_gapCheck.position, _groundedRadius, _groundLayer);
+        //if (hitGap || Physics2D.OverlapCircle(_gapCheck.position, _groundedRadius, _groundLayer))
+        //{
+        //    _colGap = true;
+        //}
+        //else
+        //    _colGap = false;
     }
 
     private void SideCollisions()
     {
         //RaycastHit2D hitSide;
-        //hitSide = FacingRight ? Physics2D.Raycast(_gapCheck.position, Vector2.up, _sideRayBuffer, _sideCheckLayer) : Physics2D.Raycast(_sideCheck.position, Vector2.left, _sideRayBuffer, _sideCheckLayer);
+        //hitSide = _facingRight ? Physics2D.Raycast(_gapCheck.position, Vector2.up, _sideRayBuffer, _sideCheckLayer) : Physics2D.Raycast(_sideCheck.position, Vector2.left, _sideRayBuffer, _sideCheckLayer);
         //hitSide = Physics2D.Raycast(_gapCheck.position, Vector2.up, _sideRayBuffer, _sideCheckLayer);
         Collider2D hitSide = Physics2D.OverlapBox(_sideCheck.position, new Vector2(_sideABuffer, _sideBBuffer), 0f, _sideCheckLayer);
 
@@ -188,7 +181,7 @@ public class EnemyController : MonoBehaviour
     public bool FollowingTarget(Animator animator)
     {
         _targetPos = _target.position;
-       // float distance = Vector2.Distance(transform.position, _targetPos);
+        // float distance = Vector2.Distance(transform.position, _targetPos);
         print("_colTarget = " + _colTarget);
         FlipWhenTargetRight(_targetPos);
 
@@ -209,11 +202,11 @@ public class EnemyController : MonoBehaviour
         _targetPos = _lastSeenTargetPos;
         float distance = Mathf.Abs(transform.position.x - _targetPos.x);// CHANGE
         FlipWhenTargetRight(_targetPos);
-        if (distance < 1f)   
+        if (distance < 1f)
         {
             animator.SetBool("isSearching", false);// CHANGE
         }
-        
+
     }
 
     private void FlipWhenTargetRight(Vector2 target)
@@ -226,14 +219,14 @@ public class EnemyController : MonoBehaviour
             isTargetRight = false;
 
         // When enemy is not looking at the player - flip him
-        if (isTargetRight != FacingRight)
+        if (isTargetRight != _facingRight)
             Flip();
     }
 
     private void Flip()
     {
         // Switch the way the player is labelled as facing.
-        FacingRight = !FacingRight;
+        _facingRight = !_facingRight;
 
         // Multiply the player's x local scale by -1.
         Vector3 theScale = transform.localScale;
@@ -243,10 +236,11 @@ public class EnemyController : MonoBehaviour
     #endregion
 
     #region Move
-    public void MoveCharacter(float horizontalSpeed, float verticalSpeed)
+    public void MoveCharacter(Vector2 velocity)
     {
         //RawMovement = new Vector2(_currentHorizontalSpeed, _currentVerticalSpeed);
-        _rigidbody2D.velocity = new Vector2(horizontalSpeed, verticalSpeed);
+        //_rigidbody2D.velocity = new Vector2(horizontalSpeed, verticalSpeed);
+        _rigidbody2D.velocity = velocity;
     }
 
     public void MoveCharacterX(float horizontalSpeed)
@@ -265,28 +259,72 @@ public class EnemyController : MonoBehaviour
     [Header("Conditions")]
     [SerializeField] private bool _canSearchForTarget;
     [SerializeField] private float _maxSearchDistance;
-    [SerializeField] private float _maxWallJumpHeight;
+    [SerializeField] private float _maxJumpHeight;
+    [SerializeField] private float _maxJumpDistance;
+    [SerializeField] private float _jumpOffsetX;
+    [SerializeField] private float _jumpOffsetY;
     [SerializeField] private Vector2 _lastSeenTargetPos;
-    public bool ShouldJump()
+
+    public Vector2 JumpPoint;
+    public bool ShouldJumpY()
     {
         // If there is no wall ahead no need to jump over it
-        if (!_colWall) return false;
+        if (!_colWall || !_colDown) return false;
         float wallHeight;
         Vector2 hitOrigin = _gapCheck.position;
-        float rayLength = _maxWallJumpHeight;
-        RaycastHit2D hitYUp = Physics2D.Raycast(hitOrigin, Vector2.up, rayLength, _groundLayer);
+        float rayLength = _maxJumpHeight;
+        RaycastHit2D hitUp = Physics2D.Raycast(hitOrigin, Vector2.up, rayLength, _groundLayer);
 
         // Now its time to calculate wall height so we can understand if enemy can jump over it
-        if (hitYUp.collider == null) return false;
+        if (hitUp.collider == null) return false;
 
-        Vector2 hitPoint = hitYUp.point;
+        Vector2 hitPoint = hitUp.point;
         wallHeight = hitPoint.y - hitOrigin.y;
 
-        Debug.DrawRay(_gapCheck.position, _maxWallJumpHeight * Vector2.up, Color.magenta);
-        Debug.DrawRay(_gapCheck.position + Vector3.left, _maxWallJumpHeight * Vector2.up, Color.yellow);
+        Debug.DrawRay(_gapCheck.position, _maxJumpHeight * Vector2.up, Color.magenta);
+        Debug.DrawRay(_gapCheck.position + Vector3.left, _maxJumpHeight * Vector2.up, Color.yellow);
+
+        if (wallHeight > _maxJumpHeight) return false;
+
+        JumpPoint = hitPoint;
+        return true;
+    }
+
+    public bool ShouldJumpX()
+    {
+        if (_colWall || _colGap || _colGapDown || !_colDown) return false;
+        Vector2 hitOriginPos = _sideCheck.position;
+        Vector2 hitOrigin = new(hitOriginPos.x, hitOriginPos.y);
+        float rayLength = _gapRayBuffer;
+        RaycastHit2D hitGap;
+
+        hitGap = Physics2D.Raycast(hitOrigin, Vector2.down, rayLength, _groundLayer);
+
+        for (int i = 1; i < Mathf.RoundToInt(_maxJumpDistance); i++)
+        {
+            if (hitGap.collider != null) break;
+            hitOrigin = _facingRight ? new(hitOriginPos.x + i, hitOriginPos.y) : new(hitOriginPos.x - i, hitOriginPos.y);
+            hitGap = Physics2D.Raycast(hitOrigin, Vector2.down, rayLength, _groundLayer);
+
+        }
 
 
-        if (wallHeight > _maxWallJumpHeight) return false;
+        // Now its time to calculate wall height so we can understand if enemy can jump over it
+        if (hitGap.collider == null) return false;
+
+        Vector2 hitPoint = hitGap.point;
+        print("hitPoint" + hitPoint);
+        //float gapLength = hitPoint.x - hitOrigin.x;
+
+        //Debug.DrawRay(_gapCheck.position, _maxJumpHeight * Vector2.up, Color.magenta);
+        //Debug.DrawRay(_gapCheck.position + Vector3.left, _maxJumpHeight * Vector2.up, Color.yellow);
+
+        //if (wallHeight > _maxJumpHeight) return false;
+        _jumpOffsetX = _facingRight ? _jumpOffsetX : -_jumpOffsetX;
+        //_jumpOffsetY = _facingRight ? _jumpOffsetY : -_jumpOffsetY;
+
+        hitPoint = new(hitPoint.x + _jumpOffsetX, hitPoint.y + _jumpOffsetY);
+        JumpPoint = hitPoint;
         return true;
     }
 
@@ -303,12 +341,6 @@ public class EnemyController : MonoBehaviour
             animator.SetBool("seeTarget", false);
             return false;
         }
-
-        //bool shouldFindTarget;
-
-        //shouldFindTarget = true;
-
-        //FlipWhenTargetRight(_lastSeenTargetPos);
 
         Vector2 direction = (_target.position - _ceilingCheck.position).normalized;
 
@@ -328,15 +360,13 @@ public class EnemyController : MonoBehaviour
             animator.SetBool("seeTarget", false);
             return false;
         }
-
-
-        //return shouldFindTarget;
     }
 
     #endregion
 
     private void OnDrawGizmos()
     {
+        Gizmos.DrawWireSphere(JumpPoint, _groundedRadius * 10);
         Gizmos.DrawWireSphere(_groundCheck.position, _groundedRadius);
         Gizmos.DrawWireSphere(_gapCheck.position, _groundedRadius);
         Gizmos.DrawWireCube(_sideCheck.position, new Vector2(_sideABuffer, _sideBBuffer));

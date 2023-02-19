@@ -129,14 +129,6 @@ namespace MainController
                 _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * Time.deltaTime);
             }
 
-            //if (_currentHorizontalSpeed > 0 && _colRight && _facingRight || _currentHorizontalSpeed < 0 && _colLeft && !_facingRight)
-            //{
-            //    // Don't walk through walls
-            //    Debug.Log("Side Col");
-            //    _currentHorizontalSpeed = 0;
-            //}
-
-
         }
 
         #endregion
@@ -177,8 +169,6 @@ namespace MainController
             // Jump if: grounded or within coyote threshold || sufficient jump buffer
             if (HasBufferedJump)
             {
-                Debug.Log("HasBufferedJump");
-
                 _currentVerticalSpeed = _jumpHeight;
                 _endedJumpEarly = false;
                 //_coyoteUsable = false;
@@ -188,8 +178,6 @@ namespace MainController
             }
             else if (Input.JumpDown && CanUseCoyote)
             {
-                Debug.Log("Coyote");
-
                 _currentVerticalSpeed = _jumpHeight;
                 _endedJumpEarly = false;
                 _coyoteUsable = false;
@@ -199,7 +187,6 @@ namespace MainController
             }
             else if (Input.JumpDown && _currentJump < _numberOfJumps)
             {
-                Debug.Log("Second Jump");
                 _currentVerticalSpeed = _jumpHeight;
                 _endedJumpEarly = false;
                 _coyoteUsable = false;
@@ -222,7 +209,6 @@ namespace MainController
             {
                 if (_currentVerticalSpeed > 0)
                 {
-                    Debug.Log("_ColUp");
                     _currentVerticalSpeed = 0;
                 }
             }
@@ -305,7 +291,6 @@ namespace MainController
             }
             else if (!_colDown && groundedCheck)
             {
-                Debug.Log("_coyoteUsable");
                 _coyoteUsable = true; // Only trigger when first touching
                 LandingThisFrame = true;
 

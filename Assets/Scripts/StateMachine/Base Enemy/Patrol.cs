@@ -17,9 +17,10 @@ public class Patrol : StateMachineBehaviour
         controller.CalculateGravity();
         controller.MoveCharacterX(controller.CalculateRun());
 
-        if (controller.ShouldJump())
+        if (controller.ShouldJumpY() || controller.ShouldJumpX())
         {
-            controller.MoveCharacterY(controller.CalculateJump());
+            controller.Stop();
+            controller.Jump();
         }
 
         animator.SetBool("targetSpotted", controller.SearchingForTarget(animator));
