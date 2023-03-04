@@ -116,7 +116,6 @@ public class EnemyController : MonoBehaviour
         _colEnemy = false;
 
         if (hitSide == null) return;
-        Debug.Log(hitSide);
         if (hitSide.CompareTag("Platforms"))
             _colWall = true;
         else if (hitSide.CompareTag(_target.tag))
@@ -171,7 +170,6 @@ public class EnemyController : MonoBehaviour
         float distance = Vector2.Distance(transform.position, _targetPos);
 
         FlipWhenTargetRight(_targetPos);
-        print("Patroling");
 
         if (distance < 1f)// || !CanReach())
         {
@@ -182,10 +180,9 @@ public class EnemyController : MonoBehaviour
     {
         _targetPos = _target.position;
         // float distance = Vector2.Distance(transform.position, _targetPos);
-        print("_colTarget = " + _colTarget);
         FlipWhenTargetRight(_targetPos);
 
-        if (_colTarget)
+        if (_colTarget && _colDown)
         {
             animator.SetBool("targetReached", true);
             return false;
@@ -313,7 +310,7 @@ public class EnemyController : MonoBehaviour
         if (hitGap.collider == null) return false;
 
         Vector2 hitPoint = hitGap.point;
-        print("hitPoint" + hitPoint);
+        //print("hitPoint" + hitPoint);
         //float gapLength = hitPoint.x - hitOrigin.x;
 
         //Debug.DrawRay(_gapCheck.position, _maxJumpHeight * Vector2.up, Color.magenta);

@@ -29,14 +29,14 @@ using UnityEngine;
 
         private void AgeUpdate()
         {
-            if (!Stats.BenjaminButton)
-            {
-                Age = Mathf.Clamp(Stats.Age + Mathf.Round(TimeTrack.TrackPercentage * (Stats.MaxAge - Stats.MinAge)), Stats.MinAge, Stats.MaxAge);
-            }
-            if (Stats.BenjaminButton)
-            {
-                Age = Mathf.Clamp(Stats.Age - Mathf.Round(TimeTrack.TrackPercentage * (Stats.MaxAge - Stats.MinAge)), Stats.MinAge, Stats.MaxAge);
-            }
+            //if (!Stats.BenjaminButton)
+            //{
+            //    Age = Mathf.Clamp(Stats.Age + Mathf.Round(TimeTrack.TrackPercentage * (Stats.MaxAge - Stats.MinAge)), Stats.MinAge, Stats.MaxAge);
+            //}
+            //if (Stats.BenjaminButton)
+            //{
+            //    Age = Mathf.Clamp(Stats.Age - Mathf.Round(TimeTrack.TrackPercentage * (Stats.MaxAge - Stats.MinAge)), Stats.MinAge, Stats.MaxAge);
+            //}
         }
 
 
