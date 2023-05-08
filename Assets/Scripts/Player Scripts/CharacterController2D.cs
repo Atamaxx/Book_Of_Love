@@ -23,9 +23,6 @@ namespace MainController
         public event Action Sprinting;
 
 
-
-
-
         private Vector3 _lastPosition;
         public float _currentHorizontalSpeed, _currentVerticalSpeed;
         private Rigidbody2D _rigidbody2D;
@@ -34,7 +31,6 @@ namespace MainController
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
             Invoke(nameof(Activate), 0.5f);
-            //_playerCollider = GetComponent<Collider2D>();
         }
 
         private bool _active;
@@ -146,7 +142,7 @@ namespace MainController
         [SerializeField] private bool _endedJumpEarly = true;
         private float _apexPoint; // Becomes 1 at the apex of a jump
         private float _lastJumpPressed;
-        private int _currentJump;
+        [SerializeField] private int _currentJump;
         private bool CanUseCoyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
         private bool HasBufferedJump => _colDown && _lastJumpPressed + _jumpBuffer > Time.time;
 
@@ -192,6 +188,11 @@ namespace MainController
                 _coyoteUsable = false;
                 JumpingThisFrame = true;
                 _currentJump++;
+            }            
+            else if (_colDown)
+            {
+                _currentJump = 0;
+                JumpingThisFrame = false;
             }
             else
             {
@@ -232,7 +233,6 @@ namespace MainController
                 if (_currentVerticalSpeed < 0)
                 {
                     _currentVerticalSpeed = 0;
-
                 }
             }
             else

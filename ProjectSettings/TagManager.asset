@@ -10,6 +10,7 @@ TagManager:
   - Main Enemy
   - Death
   - Absorb
+  - Letters
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Platforms
   - Obstacles
   - Enemies
-  - 
+  - Letters
   - 
   - 
   - 
