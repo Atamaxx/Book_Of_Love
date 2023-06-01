@@ -78,7 +78,7 @@ namespace BaseEnemy
 
         private int GetState()
         {
-            if (Time.time < _lockedTill) return _currentState;
+            if (UnityEngine.Time.time < _lockedTill) return _currentState;
 
             // Priorities
             if (_attacked) return LockState(Attack, _attackAnimTime);
@@ -92,7 +92,7 @@ namespace BaseEnemy
 
             int LockState(int s, float t)
             {
-                _lockedTill = Time.time + t;
+                _lockedTill = UnityEngine.Time.time + t;
                 return s;
             }
         }

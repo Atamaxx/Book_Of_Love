@@ -38,12 +38,9 @@ public class LineDrawerTool : EditorTool
         if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0 && !currentEvent.alt)
         {
             Vector3 mouseHit = HandleUtility.GUIPointToWorldRay(currentEvent.mousePosition).origin;
+            ContinueLine(mouseHit);
+            Event.current.Use();
 
-            if (selectedGameObject != null && currentIndex != 0)
-            {
-                ContinueLine(mouseHit);
-                Event.current.Use();
-            }
         }
 
         if (currentEvent.type == EventType.MouseDrag && currentEvent.button == 0 && !currentEvent.alt)
@@ -76,7 +73,17 @@ public class LineDrawerTool : EditorTool
     void ContinueLine(Vector3 lineVertexPos)
     {
         lineVertexPos.z = 0;
+        currentIndex = lineRenderer.positionCount;
         lineRenderer.positionCount = currentIndex + 1;
+        lineRenderer.SetPosition(currentIndex, lineVertexPos);
+
+        currentIndex++;
+    }
+
+    void StartLine(Vector3 lineVertexPos)
+    {
+        lineVertexPos.z = 0;
+        lineRenderer.positionCount = 1;
         lineRenderer.SetPosition(currentIndex, lineVertexPos);
 
         currentIndex++;

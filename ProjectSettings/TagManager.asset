@@ -11,6 +11,8 @@ TagManager:
   - Death
   - Absorb
   - Letters
+  - Test 1
+  - Test 2
   layers:
   - Default
   - TransparentFX
@@ -22,7 +24,7 @@ TagManager:
   - Obstacles
   - Enemies
   - Letters
-  - 
+  - Movement Limiter
   - 
   - 
   - 

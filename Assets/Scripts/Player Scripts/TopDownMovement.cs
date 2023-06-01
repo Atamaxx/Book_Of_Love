@@ -7,7 +7,8 @@ public class TopDownMovement : MonoBehaviour
     private float _horizontalInput;
     private float _verticalInput;
 
-    public float DiagonalMoveLimiter = 0.7f;
+    [Range(0, 1)] public float DiagonalMoveLimiter = 0.9f;
+    [Range(0, 15)] public float MovementLimiter = 5f;
     public float RunSpeed = 20.0f;
     public float SprintMultiplier = 2;
 
@@ -41,12 +42,15 @@ public class TopDownMovement : MonoBehaviour
     private void MovementCalculation()
     {
         if (Input.GetButton("Sprint"))
-        {
             _rigidbody2D.velocity = new Vector2(_horizontalInput * RunSpeed * SprintMultiplier, _verticalInput * RunSpeed * SprintMultiplier);
-        }
         else
-        {
             _rigidbody2D.velocity = new Vector2(_horizontalInput * RunSpeed, _verticalInput * RunSpeed);
-        }
+
+
+
+
+
     }
+
+    
 }

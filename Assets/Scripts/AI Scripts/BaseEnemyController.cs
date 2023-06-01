@@ -78,11 +78,11 @@ using UnityEngine;
             {
                 if (aiLogic.FacingRight)
                 {
-                    _currentHorizontalSpeed += _acceleration * Time.deltaTime;
+                _currentHorizontalSpeed += _acceleration * UnityEngine.Time.deltaTime;
                 }
                 else
                 {
-                    _currentHorizontalSpeed += -_acceleration * Time.deltaTime;
+                _currentHorizontalSpeed += -_acceleration * UnityEngine.Time.deltaTime;
                 }
 
                 _currentHorizontalSpeed = Mathf.Clamp(_currentHorizontalSpeed, -_moveClamp, _moveClamp);
@@ -93,8 +93,8 @@ using UnityEngine;
             }
             else
             {
-                // No input. Let's slow the character down
-                _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * Time.deltaTime);
+            // No input. Let's slow the character down
+            _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * UnityEngine.Time.deltaTime);
             }
 
             Speed = _currentHorizontalSpeed;
@@ -202,8 +202,8 @@ using UnityEngine;
             else
             {
                 _fallSpeed = _minFallSpeed;
-                // Fall
-                _currentVerticalSpeed -= _fallSpeed * Time.deltaTime;
+            // Fall
+            _currentVerticalSpeed -= _fallSpeed * UnityEngine.Time.deltaTime;
 
                 // Clamp
                 if (_currentVerticalSpeed < _fallClamp) _currentVerticalSpeed = _fallClamp;

@@ -20,7 +20,7 @@ public class CameraFollow : MonoBehaviour
         //Vector3 newPos = new(lastPlayer.x, lastPlayer.y + yOffset, -10f);
         //transform.position = Vector3.Slerp(transform.position, newPos, FollowSpeed * Time.deltaTime);
 
-        float time = Time.time;
+        float time = UnityEngine.Time.time;
         float duration = 5.0f;
         start = target;
 

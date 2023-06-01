@@ -2,33 +2,66 @@ using UnityEngine;
 
 public class MoveObjectToCursor : MonoBehaviour
 {
-
     Vector3 mousePosition;
-    public float speed = 5f;
+    public float Speed = 1f;
+    public float SpeedClamp = 1f;
+    public bool Rotation = false;
+    public bool IsCursorVisible = false;
     private bool facingRight = true;
+    private float currentSpeed = 5f;
 
     private Vector2 lastObjectPos;
     private Vector2 objectPos;
+    private Vector3 clampPos;
+    private bool isClamping;
+
+    Rigidbody2D rb2D;
 
     void Start()
     {
-        Cursor.visible = false;
+        Cursor.visible = IsCursorVisible;
         lastObjectPos = transform.position;
-
+        currentSpeed = Speed;
+        rb2D = GetComponent<Rigidbody2D>();
     }
     void Update()
     {
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
+
+        StopMovement();
     }
 
     private void FixedUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, mousePosition, speed * Time.deltaTime);
-        RotateObject(); 
+        MoveToCursor();
+
+        if (Rotation)
+            RotateObject();
     }
 
+    private void MoveToCursor()
+    {
+        Vector3 objPos = transform.position;
+        Vector3 moveTo = mousePosition;
+        //float distance = Vector3.Distance(objPos, moveTo);
+        if (currentSpeed == 0f)       
+            return;
 
+        rb2D.MovePosition(Vector3.Lerp(objPos, moveTo, currentSpeed * UnityEngine.Time.deltaTime));
+    }
+
+    private void StopMovement()
+    {
+        if (Input.GetMouseButtonDown(1) && currentSpeed != 0f)
+        {
+            currentSpeed = 0f;
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            currentSpeed = Speed;
+        }
+    }
 
     private void RotateObject()
     {

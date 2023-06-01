@@ -27,11 +27,11 @@ public class EnemyController : MonoBehaviour
     {
         if (_facingRight)
         {
-            _currentHorizontalSpeed += _acceleration * Time.deltaTime;
+            _currentHorizontalSpeed += _acceleration * UnityEngine.Time.deltaTime;
         }
         else
         {
-            _currentHorizontalSpeed += -_acceleration * Time.deltaTime;
+            _currentHorizontalSpeed += -_acceleration * UnityEngine.Time.deltaTime;
         }
 
         _currentHorizontalSpeed = Mathf.Clamp(_currentHorizontalSpeed, -_moveClamp, _moveClamp);
@@ -46,7 +46,7 @@ public class EnemyController : MonoBehaviour
         }
         else
         {
-            _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * Time.deltaTime);
+            _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * UnityEngine.Time.deltaTime);
         }
     }
     #endregion
@@ -146,7 +146,7 @@ public class EnemyController : MonoBehaviour
         else
         {
             // Fall
-            _currentVerticalSpeed -= _fallSpeed * Time.deltaTime;
+            _currentVerticalSpeed -= _fallSpeed * UnityEngine.Time.deltaTime;
 
             // Clamp
             if (_currentVerticalSpeed < _fallClamp) _currentVerticalSpeed = _fallClamp;

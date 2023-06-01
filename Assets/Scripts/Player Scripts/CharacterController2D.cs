@@ -42,7 +42,7 @@ namespace MainController
             if (!_active) return;
 
             // Calculate velocity
-            Velocity = (transform.position - _lastPosition) / Time.deltaTime;
+            Velocity = (transform.position - _lastPosition) / UnityEngine.Time.deltaTime;
             _lastPosition = transform.position;
 
             GatherInput();
@@ -71,7 +71,7 @@ namespace MainController
             };
             if (Input.JumpDown)
             {
-                _lastJumpPressed = Time.time;
+                _lastJumpPressed = UnityEngine.Time.time;
             }
         }
 
@@ -97,7 +97,7 @@ namespace MainController
                 {
                     Sprinting?.Invoke();
                     // Set horizontal sprint speed
-                    _currentHorizontalSpeed += _sprintMultiplier * Input.X * _acceleration * Time.deltaTime;
+                    _currentHorizontalSpeed += _sprintMultiplier * Input.X * _acceleration * UnityEngine.Time.deltaTime;
 
                     // clamped by max frame movement
                     _currentHorizontalSpeed = Mathf.Clamp(_currentHorizontalSpeed, -_moveClamp * _sprintMultiplier, _moveClamp * _sprintMultiplier);
@@ -105,7 +105,7 @@ namespace MainController
                 else
                 {
                     // Set horizontal move speed
-                    _currentHorizontalSpeed += Input.X * _acceleration * Time.deltaTime;
+                    _currentHorizontalSpeed += Input.X * _acceleration * UnityEngine.Time.deltaTime;
 
                     // clamped by max frame movement
                     _currentHorizontalSpeed = Mathf.Clamp(_currentHorizontalSpeed, -_moveClamp, _moveClamp);
@@ -113,7 +113,7 @@ namespace MainController
 
                 // Apply bonus at the apex of a jump
                 var apexBonus = Mathf.Sign(Input.X) * _apexBonus * _apexPoint;
-                _currentHorizontalSpeed += apexBonus * Time.deltaTime;
+                _currentHorizontalSpeed += apexBonus * UnityEngine.Time.deltaTime;
             }
             else if (_noAcceleration)
             {
@@ -122,7 +122,7 @@ namespace MainController
             else
             {
                 // No input. Let's slow the character down
-                _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * Time.deltaTime);
+                _currentHorizontalSpeed = Mathf.MoveTowards(_currentHorizontalSpeed, 0, _deAcceleration * UnityEngine.Time.deltaTime);
             }
 
         }
@@ -143,8 +143,8 @@ namespace MainController
         private float _apexPoint; // Becomes 1 at the apex of a jump
         private float _lastJumpPressed;
         [SerializeField] private int _currentJump;
-        private bool CanUseCoyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
-        private bool HasBufferedJump => _colDown && _lastJumpPressed + _jumpBuffer > Time.time;
+        private bool CanUseCoyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > UnityEngine.Time.time;
+        private bool HasBufferedJump => _colDown && _lastJumpPressed + _jumpBuffer > UnityEngine.Time.time;
 
         private void CalculateJumpApex()
         {
@@ -241,7 +241,7 @@ namespace MainController
                 var fallSpeed = _endedJumpEarly && _currentVerticalSpeed > 0 ? _fallSpeed * _jumpEndEarlyGravityModifier : _fallSpeed;
 
                 // Fall
-                _currentVerticalSpeed -= fallSpeed * Time.deltaTime;
+                _currentVerticalSpeed -= fallSpeed * UnityEngine.Time.deltaTime;
 
                 // Clamp
                 if (_currentVerticalSpeed < _fallClamp) _currentVerticalSpeed = _fallClamp;
@@ -284,7 +284,7 @@ namespace MainController
 
             if (_colDown && !groundedCheck)
             {
-                _timeLeftGrounded = Time.time; // Only trigger when first leaving
+                _timeLeftGrounded = UnityEngine.Time.time; // Only trigger when first leaving
                 _impactForce = 0;
                 GroundedChanged?.Invoke(groundedCheck, _impactForce);
 

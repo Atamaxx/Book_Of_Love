@@ -156,7 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &18433856
 TrailRenderer:
   serializedVersion: 2
@@ -1070,7 +1069,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 327140372}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 237.3247, y: 7.496903, z: -9.722332}
+  m_LocalPosition: {x: 237.20868, y: 7.496903, z: -9.722332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1333,7 +1332,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &404648036
 TrailRenderer:
   serializedVersion: 2
@@ -1633,7 +1631,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407700455}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 237.3247, y: 7.496903, z: -9.722332}
+  m_LocalPosition: {x: 237.20868, y: 7.496903, z: -9.722332}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -53419,7 +53417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &572751821
 TrailRenderer:
   serializedVersion: 2
@@ -53740,7 +53737,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b689e443812b87740b3ebbafe04cac55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  Speed: 1
+  SpeedClamp: 1
+  Rotation: 0
+  IsCursorVisible: 0
 --- !u!58 &590857355
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -53784,7 +53784,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f97e17bafd864db4459dd99ce28a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 590857350}
 --- !u!1001 &595751795
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54637,7 +54636,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &878535754
 TrailRenderer:
   serializedVersion: 2
@@ -54965,7 +54963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df518ce62950b244baeca30da8f59417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Scene 1
+  sceneName: Death By Hanging
 --- !u!1 &1020669792
 GameObject:
   m_ObjectHideFlags: 0
@@ -98100,11 +98098,6 @@ Transform:
   m_Father: {fileID: 1687675799}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1340288963 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4872353944000341356, guid: bcd90ab930a6679478aa5638c3a3029d, type: 3}
-  m_PrefabInstance: {fileID: 201995180}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1366031671
 GameObject:
   m_ObjectHideFlags: 0
@@ -98287,9 +98280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89483beb9f1448f469253cd33326b37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeControlledObjects: []
-  _timeGameObjects: []
-  _timeTrack: {fileID: 0}
 --- !u!4 &1422586495
 Transform:
   m_ObjectHideFlags: 0
@@ -98429,29 +98419,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66c2b7305dbac274f84dc4bdf0a31991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1340288963}
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  TIME: 0
-  _playerPos: {x: 0, y: 0}
-  stopTime: 0
-  runningTime: 0
-  wholeTime: 0
-  isStopwatchRunning: 0
-  segmentPoint1: 0
-  segmentPoint2: 1
-  cornerPass: 0
-  sameXPass: 0
-  _tolerenceDistance: 0.1
-  startTimeLine: 0
-  _trackLength: 0
-  _trackPercentage: 0
-  _trackPassed: 0
-  _toleranceValue: 2
-  _timePoint: {x: 0, y: 0}
-  _activatedPoint1: {x: 0, y: 0}
-  _activatedPoint2: {x: 0, y: 0}
 --- !u!114 &1422586499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98485,8 +98452,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbeec0f588bb4024d9b397f5190bc75e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbodies: []
-  originalConstraints: 
 --- !u!114 &1422586501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98512,15 +98477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d9e5221d2611f4e89a7cdaf86d539e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerShadow: {fileID: 2035285554039916744, guid: efeeb8e3bfefc314f89837f00998f11b, type: 3}
-  poiter: {fileID: 4642138722495624981, guid: 7a18160851ac7e04988bea1c38ccdfc8, type: 3}
-  platformLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  xOffset: 0
-  yOffset: 2
-  numberOfIterationsForColliderSearch: 100
-  checkFlow: {fileID: 1422586501}
 --- !u!1001 &1468051974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -98984,7 +98940,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &1726276559
 TrailRenderer:
   serializedVersion: 2
@@ -99263,7 +99218,7 @@ SpriteRenderer:
   m_Size: {x: 8, y: 11.41}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1768159385
@@ -99325,15 +99280,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b314b5c755db1f44d856f1463fc0482d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activateX: 1
+  activateY: 0
   _lineRenderer: {fileID: 833245143}
   _playerTransform: {fileID: 1060181651}
   _Oh: {fileID: 885938961}
   _Tutututu: {fileID: 0}
-  _currentSegment: 0
-  _betweenPoint: 0
-  _numberOfSegments: 0
-  _numberOfVertices: 0
   LineLength: 0
+  _distancePassed: 0
+  _percentPassed: 0
+  TimePoint: {x: 0, y: 0}
+  "\u0421urrentLength": 0
+  PercentPassed: 0
+  angle: 90
 --- !u!1 &1770908356
 GameObject:
   m_ObjectHideFlags: 3
@@ -99652,7 +99611,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &1969623975
 TrailRenderer:
   serializedVersion: 2
@@ -100225,7 +100183,7 @@ SpriteRenderer:
   m_Size: {x: 8, y: 11.41}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &2067936245
@@ -100448,7 +100406,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5e594dd115e0a74083de33c10c84b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0}
 --- !u!96 &2073799327
 TrailRenderer:
   serializedVersion: 2
