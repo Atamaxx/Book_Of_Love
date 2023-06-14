@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -35,6 +36,7 @@ public class LineDrawerTool : EditorTool
         HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 
         Event currentEvent = Event.current;
+
         if (currentEvent.type == EventType.MouseDown && currentEvent.button == 0 && !currentEvent.alt)
         {
             Vector3 mouseHit = HandleUtility.GUIPointToWorldRay(currentEvent.mousePosition).origin;
@@ -75,17 +77,23 @@ public class LineDrawerTool : EditorTool
         lineVertexPos.z = 0;
         currentIndex = lineRenderer.positionCount;
         lineRenderer.positionCount = currentIndex + 1;
-        lineRenderer.SetPosition(currentIndex, lineVertexPos);
+        if (!lineRenderer.useWorldSpace)
+        {
+            IntoLocalSpace(lineVertexPos);
+        }
+        else
+            lineRenderer.SetPosition(currentIndex, lineVertexPos);
 
         currentIndex++;
     }
 
-    void StartLine(Vector3 lineVertexPos)
+    void IntoLocalSpace(Vector3 point)
     {
-        lineVertexPos.z = 0;
-        lineRenderer.positionCount = 1;
-        lineRenderer.SetPosition(currentIndex, lineVertexPos);
+        lineRenderer.SetPosition(currentIndex, RoundVector(selectedGameObject.transform.InverseTransformPoint(point)));
+    }
 
-        currentIndex++;
+    Vector3 RoundVector(Vector3 vector)
+    {
+        return new Vector3((float)Math.Round(vector.x, 2), (float)Math.Round(vector.y, 2), (float)Math.Round(vector.z, 2));
     }
 }

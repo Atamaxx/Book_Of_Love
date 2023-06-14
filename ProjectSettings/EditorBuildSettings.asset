@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Guitar.unity
     guid: a3a38d54b2c8c9243b4722e88ada84b0
+  - enabled: 1
+    path: Assets/Scenes/Levels/Move The World.unity
+    guid: d681c3e27fbee22489322dae006c5587
   m_configObjects: {}

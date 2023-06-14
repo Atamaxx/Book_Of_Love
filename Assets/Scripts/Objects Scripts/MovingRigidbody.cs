@@ -7,7 +7,7 @@ public class MovingRigidbody : MonoBehaviour
 {
     public LineRenderer LineRenderer;
     [Range(0, 2)] public float _percentClamp = 1f;
-    [SerializeField] private Time _timeLine;
+    [SerializeField] private BookOf.Time _timeLine;
 
     readonly List<Vector2> _line = new();
     readonly List<float> _lineDistances = new();

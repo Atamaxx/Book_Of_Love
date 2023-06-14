@@ -211,7 +211,7 @@ public class TimeLine : MonoBehaviour
 
                 RotateTimePointIfY();
             }
-            
+
         }
 
 
@@ -325,13 +325,14 @@ public class TimeLine : MonoBehaviour
 
     #region Coordinates Changing
     private float _playerCoord;
-    
+
 
 
 
     public float angle = 90f; // The angle to rotate by (in degrees)
 
-    private void RotateTimePointIfY() {
+    private void RotateTimePointIfY()
+    {
         if (activateY)
         {
             TimePoint = RotatePoint(_line[0], TimePoint, -angle);

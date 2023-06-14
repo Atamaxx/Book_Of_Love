@@ -7,7 +7,7 @@ public class Chchchchchanges : MonoBehaviour
     public string TargetLayerName;
     public float TimeChanges;
     public Material MainMaterial;
-    [SerializeField] private Time _timeLine;
+    [SerializeField] private BookOf.Time _timeLine;
 
     readonly List<Renderer> _renderers = new();
     readonly List<Material> _materials = new();

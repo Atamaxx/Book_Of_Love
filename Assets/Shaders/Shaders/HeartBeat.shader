@@ -68,7 +68,7 @@ Shader "Levels/Listen To Your Heart/HeartBeat"
                 
                 float cutSin = lerp(-0.1, 0.1, abs(_SinTime.y));
 
-                float xOffsetSpeed = abs(_Random * cutSin * _XOffsetSpeed);
+                float xOffsetSpeed = _Random * cutSin * _XOffsetSpeed;
                 float yOffsetSpeed = _Random * cutSin * _YOffsetSpeed;
 
                 offset = float2(offset.x - xOffsetSpeed, offset.y - yOffsetSpeed);

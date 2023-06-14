@@ -4,9 +4,15 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class MovingTransform : MonoBehaviour
 {
-    public LineRenderer LineRenderer;
-    [Range(0, 2)] public float _percentClamp = 1f;
-    [SerializeField] private Time _timeLine;
+    [SerializeField] private BookOf.Time _timeLine;
+    private LineRenderer _lineRenderer;
+    [Header("SETTINGS")]
+    [Range(0, 2)] public float PercentClamp = 1f;
+    [Range(0, 200)] public float DistanceClamp = 1f;
+    public bool MoveByDistance = true;
+    public bool MoveByPercent = false;
+    //public bool Loop = false;
+
 
     readonly List<Vector2> _line = new();
     readonly List<float> _lineDistances = new();
@@ -25,30 +31,36 @@ public class MovingTransform : MonoBehaviour
     }
     private void SetUp()
     {
-        _numberOfVertices = LineRenderer.positionCount;
+        _lineRenderer = GetComponent<LineRenderer>();
+
+        _numberOfVertices = _lineRenderer.positionCount;
 
         for (int i = 0; i < _numberOfVertices; i++)
         {
-            _line.Add(LineRenderer.GetPosition(i));
+            _line.Add(_lineRenderer.GetPosition(i));
         }
 
-        if (!LineRenderer.useWorldSpace)
-        {
-            for (int i = 0; i < _numberOfVertices; i++)
-            {
-                _line[i] = transform.TransformPoint(_line[i]);
-            }
-        }
     }
     private void Update()
     {
-        _percentPassed = Mathf.Clamp(_timeLine.PercentPassed / _percentClamp, 0, 1);
-        transform.position = PositionByPercent();
+        if (MoveByDistance)
+        {
+            _percentPassed = Mathf.Clamp(_timeLine.ÑurrentLength % DistanceClamp / DistanceClamp, 0, 1);
+            transform.position = PositionByPercent();
+        }
+        else if (MoveByPercent)
+        {
+            _percentPassed = Mathf.Clamp(_timeLine.PercentPassed / PercentClamp, 0, 1);
+            transform.position = PositionByPercent();
+        }
+        else return;
+
     }
 
 
     Vector2 PositionByPercent()
     {
+
         Vector2 position = Vector2.zero;
 
         float percentLength = _percentPassed * _lineLength;
@@ -72,9 +84,40 @@ public class MovingTransform : MonoBehaviour
             }
         }
 
-        if (!LineRenderer.useWorldSpace)        
-            position = transform.InverseTransformPoint(position);
-        
+
+
+        return position;
+    }
+
+    Vector2 PositionByDistance()
+    {
+        _percentPassed = _timeLine.ÑurrentLength % DistanceClamp;
+
+        Vector2 position = Vector2.zero;
+
+        float percentLength = _percentPassed * _lineLength;
+
+        for (int i = 1; i < _numberOfVertices; i++)
+        {
+            float currDist = _lineDistances[i];
+
+            if (percentLength <= currDist)
+            {
+                float prevDist = _lineDistances[i - 1];
+                float fraction = (percentLength - prevDist) / (currDist - prevDist);
+
+                float startX = _line[i - 1].x;
+                float startY = _line[i - 1].y;
+                float endX = _line[i].x;
+                float endY = _line[i].y;
+
+                position = new Vector2(startX + fraction * (endX - startX), startY + fraction * (endY - startY));
+                break;
+            }
+        }
+
+
+
         return position;
     }
 

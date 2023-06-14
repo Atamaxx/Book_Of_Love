@@ -583,7 +583,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616201413}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 76.069275, y: -3.9732208, z: -503}
+  m_LocalPosition: {x: 20.369263, y: -0.4732206, z: -503}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -663,11 +663,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8638611417130373757, guid: cfb5e4cec2003d14983537b2c4034a54, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 55.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8638611417130373757, guid: cfb5e4cec2003d14983537b2c4034a54, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8638611417130373757, guid: cfb5e4cec2003d14983537b2c4034a54, type: 3}
       propertyPath: m_LocalPosition.z
@@ -889,7 +889,7 @@ MonoBehaviour:
   - {fileID: 228569753}
   - {fileID: 889005552}
   - {fileID: 1746253504}
-  sceneName: Death By Hanging
+  sceneName: Move The World
   CanSetPoints: 1
   ActiveColor: {r: 0.079458855, g: 0.6792453, b: 0.08717486, a: 1}
   DisableColor: {r: 0.9811321, g: 0.21589983, b: 0.059238106, a: 1}
@@ -2026,8 +2026,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1357018797}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -229.6, y: -2.2, z: 0}
-  m_LocalScale: {x: 5.4355, y: 5.4355, z: 5.4355}
+  m_LocalPosition: {x: -255.5, y: 0.1, z: 0}
+  m_LocalScale: {x: 6.431284, y: 6.431284, z: 6.431284}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -2408,7 +2408,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1685626595}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -429.6, y: 7.2, z: 375.81146}
+  m_LocalPosition: {x: -440.2, y: -70.1, z: 375.81146}
   m_LocalScale: {x: 9.002907, y: 8.317315, z: 6.8366294}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2963,7 +2963,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143501582}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 76.069275, y: -3.9732208, z: -503}
+  m_LocalPosition: {x: 20.369263, y: -0.4732206, z: -503}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

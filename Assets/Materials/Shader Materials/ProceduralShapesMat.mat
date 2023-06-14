@@ -42,15 +42,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Diameter: 0.3
-    - _Height: 0.879
+    - _Diameter: 31.03
+    - _Height: 38.56
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Radius: 13.56
     - _Rotation: 4.31
-    - _Width: 1
+    - _Width: 18.26
     m_Colors:
-    - _CircleCentre: {r: -50, g: 0, b: 0, a: 0}
+    - _CircleCentre: {r: -58.38, g: 0, b: 0, a: 0}
+    - _PointA: {r: 0, g: 0, b: 0, a: 0}
+    - _PointB: {r: 0, g: 0, b: 0, a: 0}
+    - _PointC: {r: 0, g: 0, b: 0, a: 0}
     - _TriangleBase: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &6173921889948472813

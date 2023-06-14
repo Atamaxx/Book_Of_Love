@@ -34,6 +34,7 @@ public class MoveObjectToCursor : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         MoveToCursor();
 
         if (Rotation)
@@ -42,11 +43,11 @@ public class MoveObjectToCursor : MonoBehaviour
 
     private void MoveToCursor()
     {
-        Vector3 objPos = transform.position;
-        Vector3 moveTo = mousePosition;
-        //float distance = Vector3.Distance(objPos, moveTo);
-        if (currentSpeed == 0f)       
+        if (currentSpeed == 0f)
             return;
+
+        Vector3 objPos = transform.position;
+        Vector3 moveTo = mousePosition;        
 
         rb2D.MovePosition(Vector3.Lerp(objPos, moveTo, currentSpeed * UnityEngine.Time.deltaTime));
     }
