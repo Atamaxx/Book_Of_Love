@@ -192,7 +192,6 @@ public class TimeLine : MonoBehaviour
 
             if (pointDirRight0 && _playerCoord < _lineCoord[pointNum0])
             {
-                print(0);
                 TimePoint = _line[pointNum0];
                 _betweenPoint = pointNum0;
                 _currentSegment--;
@@ -202,8 +201,6 @@ public class TimeLine : MonoBehaviour
             }
             else if (!pointDirRight0 && _playerCoord > _lineCoord[pointNum0])
             {
-                print(1);
-
                 TimePoint = _line[pointNum0];
                 _betweenPoint = pointNum0;
                 _currentSegment--;
@@ -225,8 +222,6 @@ public class TimeLine : MonoBehaviour
 
             if (pointDirRight1 && _playerCoord < _lineCoord[pointNum1])
             {
-                print(2);
-
                 TimePoint = _line[pointNum1];
                 _betweenPoint = pointNum1;
                 _currentSegment++;
@@ -236,7 +231,6 @@ public class TimeLine : MonoBehaviour
             }
             else if (!pointDirRight1 && _playerCoord > _lineCoord[pointNum1])
             {
-                print(3);
                 TimePoint = _line[pointNum1];
                 _betweenPoint = pointNum1;
                 _currentSegment++;

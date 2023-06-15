@@ -1,20 +1,39 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class LRDisplayValues : MonoBehaviour
 {
-    public Text numberText;
-    public int number;
+    public TextMeshPro numberTextPrefab;
 
-    [ContextMenu("DisplayNumbers")]
-    void DisplayNumbers()
+    private LineRenderer _line;
+    public float intervalDistance = 10f;
+    private float length;
+    private TextMeshPro currentText;
+
+
+
+    private void OnContext()
     {
-        numberText.text = number.ToString();
+        _line = GetComponent<LineRenderer>();
+        length = My.Line.CalculateLength(_line);
     }
 
-    // Example method to update the number value
-    public void SetNumber(int newNumber)
+    [ContextMenu("Mark By Distance")]
+    private void MarkByDistance()
     {
-        number = newNumber;
+        OnContext();
+        int numOfPoints = (int)(length / intervalDistance);
+
+        GameObject parentObject = new ("Distance Markers");
+
+        for (int i = 0; i < numOfPoints + 1; i++)
+        {
+            float dist = i * intervalDistance;
+            currentText = Instantiate(numberTextPrefab, My.Line.FindPointByLength(_line, dist), Quaternion.identity);
+            currentText.transform.SetParent(parentObject.transform);
+            currentText.text = dist.ToString();
+        }
     }
+
 }

@@ -35,8 +35,8 @@ public class ConnectAreas : MonoBehaviour
         _verticesNum = _vertexPoints.Count;
         if (_verticesNum > 0)
             _vertexPoints[_activeVertexNum] = _time.TimePoint;
-        _mainArea = MyMath.CalculatePolygonArea(_vertexPoints);
-        _cirleRadius = MyMath.CircleRadiusByArea(_mainArea);
+        _mainArea = My.Math.CalculatePolygonArea(_vertexPoints);
+        _cirleRadius = My.Math.CircleRadiusByArea(_mainArea);
 
         ShaderUpdate();
     }
