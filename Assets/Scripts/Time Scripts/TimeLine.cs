@@ -45,7 +45,7 @@ public class TimeLine : MonoBehaviour
 
     private void SetUp()
     {
-        Tutututu = transform.Find("Hi, Sonya").gameObject;
+        Tutututu = Instantiate(Tutututu, TimePoint, Quaternion.identity);
 
         _numberOfVertices = _lineRenderer.positionCount;
 

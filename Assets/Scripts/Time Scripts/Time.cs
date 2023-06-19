@@ -43,7 +43,7 @@ namespace BookOf
             }
             _renderers[currIndex].color = ActiveColor;
 
-            StartingPoints();
+            //StartingPoints();
         }
 
         private void Update()
@@ -121,10 +121,10 @@ namespace BookOf
         public List<Vector3> SetPoints = new();
         public int ActivePointNum = 0;
 
-        private void StartingPoints()
-        {
-            SetPoints.Add(TimePoint);
-        }
+        //private void StartingPoints()
+        //{
+        //    SetPoints.Add(TimePoint);
+        //}
 
         private void SetPoint()
         {
@@ -135,7 +135,9 @@ namespace BookOf
                 {
                     SetPoints.RemoveAt(0);
                 }
-                SetPoints.Add(Instantiate(_linePoints[currIndex], _linePoints[currIndex].position, Quaternion.identity).position);
+                Transform currPoint = Instantiate(_linePoints[currIndex], TimePoint, Quaternion.identity);
+                SetPoints.Add(currPoint.position);
+                currPoint.name = "point_" + numberOfPoints;
                 ActivePointNum = numberOfPoints - 1;
             }
         }

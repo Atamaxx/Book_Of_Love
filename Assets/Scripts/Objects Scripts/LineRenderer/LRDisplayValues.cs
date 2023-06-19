@@ -7,7 +7,8 @@ public class LRDisplayValues : MonoBehaviour
     public TextMeshPro numberTextPrefab;
 
     private LineRenderer _line;
-    public float intervalDistance = 10f;
+    public float IntervalDistance = 10f;
+    public float MarkersDivider = 1f;
     private float length;
     private TextMeshPro currentText;
 
@@ -23,16 +24,18 @@ public class LRDisplayValues : MonoBehaviour
     private void MarkByDistance()
     {
         OnContext();
-        int numOfPoints = (int)(length / intervalDistance);
+        int numOfPoints = (int)(length / IntervalDistance);
 
         GameObject parentObject = new ("Distance Markers");
 
         for (int i = 0; i < numOfPoints + 1; i++)
         {
-            float dist = i * intervalDistance;
+            float dist = i * IntervalDistance;
             currentText = Instantiate(numberTextPrefab, My.Line.FindPointByLength(_line, dist), Quaternion.identity);
             currentText.transform.SetParent(parentObject.transform);
-            currentText.text = dist.ToString();
+            string text = (dist / MarkersDivider).ToString();
+            currentText.name = text;
+            currentText.text = text;
         }
     }
 
