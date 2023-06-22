@@ -16441,7 +16441,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberTextPrefab: {fileID: 7006580575700134446, guid: c78fa504d7d8b8242ace6ee0176ef528, type: 3}
-  intervalDistance: 5
+  IntervalDistance: 10
+  MarkersDivider: 1
 --- !u!1 &1898660261
 GameObject:
   m_ObjectHideFlags: 0

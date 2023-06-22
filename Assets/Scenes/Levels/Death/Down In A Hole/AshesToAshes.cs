@@ -50,7 +50,7 @@ public class AshesToAshes : MonoBehaviour
 
         if (IsDawn) return;
 
-        _coroutineEnded = My.Move.IsEnded();
+        //_coroutineEnded = My.Move.IsEnded();
         Teleporting();
 
     }

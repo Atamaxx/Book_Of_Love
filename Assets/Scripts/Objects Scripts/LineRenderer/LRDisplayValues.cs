@@ -38,5 +38,16 @@ public class LRDisplayValues : MonoBehaviour
             currentText.text = text;
         }
     }
+    [ContextMenu("Set Z to 0")]
+    private void Zto0()
+    {
+        OnContext();
+        for (int i = 0; i < _line.positionCount; i++)
+        {
+            Vector3 point = _line.GetPosition(i);
+            point.z = 0;
+            _line.SetPosition(i, point);
+        }
+    }
 
 }
