@@ -2,96 +2,142 @@ using UnityEngine;
 
 public class MoveObjectToCursor : MonoBehaviour
 {
-    Vector3 mousePosition;
+    //Vector3 mousePosition;
     public float Speed = 1f;
     public float SpeedClamp = 1f;
-    public bool Rotation = false;
     public bool IsCursorVisible = false;
-    private bool facingRight = true;
-    private float currentSpeed = 5f;
+    public bool MoveInsideLayer = false;
+    public float currentSpeed = 1f;
+    public float radius = 0.5f; // Radius of the overlap circle, adjust as needed
 
-    private Vector2 lastObjectPos;
-    private Vector2 objectPos;
-    private Vector3 clampPos;
-    private bool isClamping;
 
+    private Vector2 _objectPos;
+    private Vector2 _moveTo;
+
+    public bool _isMovementStoped;
     Rigidbody2D rb2D;
 
     void Start()
     {
         Cursor.visible = IsCursorVisible;
-        lastObjectPos = transform.position;
         currentSpeed = Speed;
         rb2D = GetComponent<Rigidbody2D>();
     }
+
+
+
     void Update()
     {
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
 
         StopMovement();
-    }
 
-    private void FixedUpdate()
-    {
+        _objectPos = transform.position;
+        _moveTo = mousePosition;
+
+        if (_isMovementStoped) return;
+
+        if (MoveInsideLayer && !CircleHit())
+        {
+            currentSpeed = -0.01f;
+            //rb2D.MovePosition(lastSafePosition);
+        }
+        else
+        {
+            currentSpeed = Speed;
+        }
 
         MoveToCursor();
 
-        if (Rotation)
-            RotateObject();
     }
 
     private void MoveToCursor()
     {
-        if (currentSpeed == 0f)
-            return;
-
-        Vector3 objPos = transform.position;
-        Vector3 moveTo = mousePosition;        
-
-        rb2D.MovePosition(Vector3.Lerp(objPos, moveTo, currentSpeed * UnityEngine.Time.deltaTime));
+        rb2D.MovePosition(Vector3.Lerp(_objectPos, _moveTo, currentSpeed * Time.deltaTime));
     }
 
     private void StopMovement()
     {
-        if (Input.GetMouseButtonDown(1) && currentSpeed != 0f)
+        if (InputManager.RightMouseButtonDown && currentSpeed != 0f)
         {
             currentSpeed = 0f;
+            _isMovementStoped = true;
         }
-        else if (Input.GetMouseButtonDown(1))
+        else if (InputManager.RightMouseButtonDown)
         {
             currentSpeed = Speed;
-        }
-    }
-
-    private void RotateObject()
-    {
-        Vector2 direction;
-        objectPos = transform.position;
-
-        direction = objectPos - lastObjectPos;
-
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, angle);
-
-        if (mousePosition.x < objectPos.x && facingRight)
-        {
-            Flip();
-        }
-        else if (mousePosition.x > objectPos.x && !facingRight)
-        {
-            Flip();
+        _isMovementStoped = false;
         }
 
-        lastObjectPos = objectPos;
     }
 
 
-    private void Flip()
+
+
+    private LayerMask MovementLayer => Info.PlatformLayer;
+
+    private Vector2 lastSafePosition;
+
+    void OnTriggerStay2D(Collider2D other)
     {
-        facingRight = !facingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.y *= -1;
-        transform.localScale = theScale;
+        if (!MoveInsideLayer) return;
+        if (MovementLayer == (MovementLayer | (1 << other.gameObject.layer)))
+        {
+            lastSafePosition = transform.position;
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (!MoveInsideLayer) return;
+
+        if (MovementLayer == (MovementLayer | (1 << other.gameObject.layer)))
+        {
+            rb2D.MovePosition(lastSafePosition);
+            // transform.position = lastSafePosition;
+        }
+    }
+    public float cirlceOffset = 2f;
+    Vector2 cirlceCenter;
+    bool CircleHit()
+    {
+        //Collider2D[] hitColliders = new Collider2D[4];
+        // Calculate the direction from pointA to pointB
+        Vector2 direction = (_moveTo - _objectPos).normalized;
+
+        // Calculate the point that is 1 unit away from pointA in the direction of pointB
+        cirlceCenter = _objectPos + direction * cirlceOffset;
+        Collider2D hitColliders = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
+
+        //cirlceCenter = _objectPos - direction * cirlceOffset;
+
+        //direction = new Vector2(-direction.y, direction.x);
+
+        //hitColliders[1] = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
+        //cirlceCenter = _objectPos + direction * cirlceOffset;
+        //cirlceCenters.Add(cirlceCenter);
+
+        //hitColliders[2] = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
+        //cirlceCenter = _objectPos - direction * cirlceOffset;
+        //cirlceCenters.Add(cirlceCenter);
+
+        //hitColliders[3] = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
+
+        if (hitColliders)
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        Gizmos.DrawWireSphere(cirlceCenter, radius);
+
     }
 }

@@ -1,17 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
+//[RequireComponent(typeof(LineRenderer))]
 public class MovingTransform : MonoBehaviour
 {
     [SerializeField] private BookOf.Time _timeLine;
     private LineRenderer _lineRenderer;
     [Header("MOVE BY DISTANCE")]
-    public bool MoveByDistance = true;
-    public float DistanceBottomClamp = 0f;
-    public float DistanceTopClamp = 10f;
+    public bool toMoveByDistance = true;
+    public float MoveBC = 0f; // DistanceBottomClamp 
+    public float MoveTC = 10f; // DistanceTopClamp
+    [Header("ROTATION")]
+    public bool toRotateByDistance = true;
+    public float RotateBC = 0f; // RotateBottomClamp
+    public float RotateTC = 10f; // RotateTopClamp
+    public float RotateMin = 0f; // RotateTopClamp
+    public float RotateMax = 180f; // RotateTopClamp
     [Header("MOVE BY PERCENT")]
-    public bool MoveByPercent = false;
+    public bool toMoveByPercent = false;
     [Range(0, 2)] public float PercentClamp = 1f;
     //public bool Loop = false;
     [Header("100%")]
@@ -30,6 +36,8 @@ public class MovingTransform : MonoBehaviour
 
     private void Start()
     {
+        if (!toMoveByDistance && !toMoveByPercent) return;
+
         SetUp();
         CalculateLineLength();
         _lineLength = _lineDistances[^1];
@@ -52,38 +60,61 @@ public class MovingTransform : MonoBehaviour
         _distancePassed = _timeLine.ÑurrentLength;
 
 
-        if (MoveByDistance)
+        if (toMoveByDistance)
         {
-            if (DistanceBottomClamp > _distancePassed)
-            {
-                transform.position = _line[0];
-            }
-            else if (_distancePassed > DistanceTopClamp)
-            {
-                transform.position = _line[^1];
+            MoveByDistance();
+        }
+        else if (toMoveByPercent)
+        {
+            MoveByPercent();
+        }
+        //else return;
 
-                if (EndAction)
-                {
-                    Destroy(gameObject, DestroyDelay);
-                }
-            }
-            else if (DistanceBottomClamp < _distancePassed && _distancePassed < DistanceTopClamp)
-            {
-                float clamp = DistanceTopClamp - DistanceBottomClamp;
-                _percentPassed = Mathf.Clamp((_distancePassed % DistanceTopClamp - DistanceBottomClamp) / clamp, 0, 1);
-                transform.position = PositionByPercent();
-            }          
-        }
-        else if (MoveByPercent)
+        if (toRotateByDistance)
         {
-            _percentPassed = Mathf.Clamp(_timeLine.PercentPassed / PercentClamp, 0.01f, 1);
-            transform.position = PositionByPercent();
+            RotateByDistance();
         }
-        else return;
 
     }
 
+    void MoveByDistance()
+    {
+        if (MoveBC > _distancePassed)
+        {
+            transform.position = _line[0];
+        }
+        else if (_distancePassed > MoveTC)
+        {
+            transform.position = _line[^1];
 
+            if (EndAction)
+            {
+                Destroy(gameObject, DestroyDelay);
+            }
+        }
+        else if (MoveBC < _distancePassed && _distancePassed < MoveTC)
+        {
+            float clamp = MoveTC - MoveBC;
+            _percentPassed = Mathf.Clamp((_distancePassed % MoveTC - MoveBC) / clamp, 0, 1);
+            transform.position = PositionByPercent();
+        }
+    }
+    void MoveByPercent()
+    {
+        _percentPassed = Mathf.Clamp(_timeLine.PercentPassed / PercentClamp, 0.01f, 1);
+        transform.position = PositionByPercent();
+    }
+
+    void RotateByDistance()
+    {
+        float rotationValue;
+        float distanceValue = Mathf.Clamp(_distancePassed, RotateBC, RotateTC);
+
+        rotationValue = Mathf.Lerp(RotateMin, RotateMax, distanceValue / (RotateTC - RotateBC));
+
+        Vector3 targetRotation = new (0f, 0f, rotationValue);
+        transform.rotation = Quaternion.Euler(targetRotation);
+    }
     Vector2 PositionByPercent()
     {
 

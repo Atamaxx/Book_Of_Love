@@ -4,15 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Throw
-  - Enemy
   - Platforms
-  - Main Enemy
-  - Death
-  - Absorb
   - Letters
-  - Test 1
-  - Test 2
+  - Boundary
   layers:
   - Default
   - TransparentFX
@@ -25,7 +19,7 @@ TagManager:
   - Enemies
   - Letters
   - Movement Limiter
-  - 
+  - Background
   - 
   - 
   - 
@@ -47,6 +41,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 566541785
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Platforms
+    uniqueID: 2989091005
+    locked: 0
+  - name: Points
+    uniqueID: 366790921
     locked: 0

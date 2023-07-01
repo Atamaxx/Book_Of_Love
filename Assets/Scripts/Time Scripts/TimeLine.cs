@@ -6,6 +6,8 @@ public class TimeLine : MonoBehaviour
     [Header("MAIN PROPERTIES")]
     [SerializeField] private bool activateX = true;
     [SerializeField] private bool activateY = false;
+    [SerializeField] private bool Closer = false;
+    [SerializeField] private float fuckDistance = 5f;
 
     [Header("SERIALIZE")]
     [SerializeField] private LineRenderer _lineRenderer;

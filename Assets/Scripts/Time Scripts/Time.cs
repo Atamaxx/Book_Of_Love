@@ -6,7 +6,22 @@ namespace BookOf
 {
     public class Time : MonoBehaviour
     {
-        [Header("RESULTS")]
+        [Header("SETTINGS")]
+        public bool CanWin = false;
+        public bool CanFreezeTime = false;
+
+        public Color ActiveColor;
+        public Color DisableColor;
+        [SerializeField] private float _scrollCooldown = 0.2f;
+
+        [Header("- setting points")]
+        public bool CanSetPoints = false;
+        public int MaxNumberOfPoints = 3;
+        public List<Vector3> SetPoints = new();
+        public int ActivePointNum = 0;
+        public Transform PointPrefab;
+
+[Header("RESULTS")]
         public float ÑurrentLength;
         public float PercentPassed;
         public Vector3 TimePoint;
@@ -14,13 +29,6 @@ namespace BookOf
         [Header("SERIALIZE")]
         [SerializeField] private List<TimeLine> _timeLines = new();
         [SerializeField] private string sceneName;
-
-        [Header("SETTINGS")]
-        public bool CanWin = false;
-
-        public Color ActiveColor;
-        public Color DisableColor;
-        [SerializeField] private float _scrollCooldown = 0.2f;
 
         [Header("MUSIC")]
 
@@ -46,14 +54,21 @@ namespace BookOf
             //StartingPoints();
         }
 
+        private GameObject _parentObject;
+        private void Start()
+        {
+            if (CanSetPoints)
+                _parentObject = new("Setted Points");
+        }
+
         private void Update()
         {
             WinCondition();
             ChangeLine();
-            if (CanSetPoints)
-            {
-                SetPoint();
-            }
+            SetPoint();
+            TimeFrozen();
+
+
         }
 
 
@@ -115,31 +130,39 @@ namespace BookOf
 
         #region SETTING POINTS
 
-        [Header("SETTING POINTS")]
-        public bool CanSetPoints = false;
-        public int MaxNumberOfPoints = 3;
-        public List<Vector3> SetPoints = new();
-        public int ActivePointNum = 0;
-
-        //private void StartingPoints()
-        //{
-        //    SetPoints.Add(TimePoint);
-        //}
-
         private void SetPoint()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (InputManager.LeftMouseButtonDown && CanSetPoints)
             {
                 int numberOfPoints = SetPoints.Count;
                 if (numberOfPoints >= MaxNumberOfPoints)
                 {
                     SetPoints.RemoveAt(0);
                 }
-                Transform currPoint = Instantiate(_linePoints[currIndex], TimePoint, Quaternion.identity);
-                SetPoints.Add(currPoint.position);
-                currPoint.name = "point_" + numberOfPoints;
+                SetPoints.Add(TimePoint);
                 ActivePointNum = numberOfPoints - 1;
+
+                OnPointSet();
             }
+        }
+
+        private void OnPointSet()
+        {
+            foreach (Transform child in _parentObject.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (Vector3 point in SetPoints)
+            {
+                Transform currPoint = Instantiate(PointPrefab, point, Quaternion.identity);
+                currPoint.SetParent(_parentObject.transform);
+                currPoint.name = "point";
+            }
+
+
+            if (CanFreezeTime)
+                FreezePast();
         }
 
 
@@ -158,6 +181,38 @@ namespace BookOf
             {
                 SceneManager.LoadScene(sceneName);
             }
+        }
+
+
+        private float _freezeDistance;
+        private float _freezePercent;
+        private Vector3 _freezePoint;
+        private bool _isTimeFrozen;
+
+        private void FreezePast()
+        {
+            _isTimeFrozen = true;
+            _freezeDistance = ÑurrentLength;
+            _freezePoint = TimePoint;
+            _freezePercent = PercentPassed;
+        }
+
+        private void TimeFrozen()
+        {
+            if (!_isTimeFrozen || _freezeDistance < ÑurrentLength) return;
+
+            ChangeAllResults(_freezeDistance, _freezePoint, _freezePercent);
+        }
+
+        private void ChangeAllResults(float newDistance, Vector3 newTimePoint, float newPercent)
+        {
+            ÑurrentLength = newDistance;
+            TimePoint = newTimePoint;
+            PercentPassed = newPercent;
+
+            //_timeLines[currIndex].ÑurrentLength = newDistance;
+            //_timeLines[currIndex].TimePoint = newTimePoint;
+            //_timeLines[currIndex].PercentPassed = newPercent;
         }
     }
 }

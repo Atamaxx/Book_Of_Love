@@ -6,30 +6,45 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/_Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Scene 1.unity
+    path: Assets/_Scenes/Scene 1.unity
     guid: 649b13b8d688685488ce9d955d070db2
   - enabled: 1
-    path: Assets/Scenes/GoodGirl.unity
+    path: Assets/_Scenes/GoodGirl.unity
     guid: f52366cb5d2803842b31f97cdb0fc2db
   - enabled: 1
-    path: Assets/Scenes/Levels/Death By Hanging.unity
+    path: Assets/_Scenes/Levels/Death By Hanging.unity
     guid: b37de485b7c68ed4395e8cce6b58d776
   - enabled: 1
-    path: Assets/Scenes/Levels/Guitar.unity
+    path: Assets/_Scenes/Levels/Guitar.unity
     guid: a3a38d54b2c8c9243b4722e88ada84b0
   - enabled: 1
-    path: Assets/Scenes/Levels/Move The World.unity
+    path: Assets/_Scenes/Levels/Move The World.unity
     guid: d681c3e27fbee22489322dae006c5587
   - enabled: 1
-    path: Assets/Scenes/Levels/Intro/Level 1.unity
+    path: Assets/_Scenes/Levels/Intro/Level 1.unity
     guid: 84e4c8feb70175340922ee822cde9ad3
   - enabled: 1
-    path: Assets/Scenes/Levels/Intro/Level 2.unity
+    path: Assets/_Scenes/Levels/Intro/Level 2.unity
     guid: 22ae8a548082d4147b87ae59430940a5
   - enabled: 1
-    path: Assets/Scenes/Levels/Intro/Level 3.unity
+    path: Assets/_Scenes/Levels/Intro/Level 3.unity
     guid: cb6d2d5a709924444915fe0aac9c6247
+  - enabled: 1
+    path: Assets/_Scenes/Levels/Intro/Level 4.unity
+    guid: b18a9298e93e29745800cdce5d637f84
+  - enabled: 1
+    path: Assets/_Scenes/Levels/Intro/Level 5.unity
+    guid: 765d9f805ebc42f409d4f5be1a0c7271
+  - enabled: 1
+    path: Assets/_Scenes/Levels/Intro/Level 6.unity
+    guid: 95cd6e2f57ac52a43878656944ee8218
+  - enabled: 1
+    path: Assets/_Scenes/Levels/Intro/Level 7.unity
+    guid: c3138ea98d2cc414aa6ebd150eee6427
+  - enabled: 1
+    path: Assets/_Scenes/Levels/Intro/Level 8.unity
+    guid: a3f7ba673c5489b46b5c30e172467af5
   m_configObjects: {}
