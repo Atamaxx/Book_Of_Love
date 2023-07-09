@@ -5647,8 +5647,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693071574}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 33.62, y: -20.59, z: 0}
-  m_LocalScale: {x: 6.647784, y: 5.552098, z: 0.9123463}
+  m_LocalPosition: {x: 20.3, y: -12.8, z: 0}
+  m_LocalScale: {x: 6.647784, y: 7.959487, z: 0.9123463}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -5795,9 +5795,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcdebd32a0c20d04087fe3715fddad43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Spriteq: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  boxCollider1: {fileID: 693071576}
-  boxCollider2: {fileID: 1520292748}
+  maskPrefab: {fileID: 0}
 --- !u!1 &704968339
 GameObject:
   m_ObjectHideFlags: 0
@@ -13785,6 +13783,7 @@ GameObject:
   - component: {fileID: 1520292749}
   - component: {fileID: 1520292748}
   - component: {fileID: 1520292750}
+  - component: {fileID: 1520292751}
   m_Layer: 6
   m_Name: Platform1 (15)
   m_TagString: Untagged
@@ -13936,6 +13935,19 @@ SpriteMask:
   m_BackSortingOrder: 1
   m_IsCustomRangeActive: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1520292751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520292746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcdebd32a0c20d04087fe3715fddad43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maskPrefab: {fileID: 3412201262085234121, guid: 70827072bde261c4d84f885287cbd45c, type: 3}
 --- !u!1 &1534607295
 GameObject:
   m_ObjectHideFlags: 0

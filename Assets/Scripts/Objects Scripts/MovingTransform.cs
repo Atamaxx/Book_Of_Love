@@ -1,64 +1,76 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using NaughtyAttributes;
 //[RequireComponent(typeof(LineRenderer))]
 public class MovingTransform : MonoBehaviour
 {
     [SerializeField] private BookOf.Time _timeLine;
-    private LineRenderer _lineRenderer;
-    [Header("MOVE BY DISTANCE")]
-    public bool toMoveByDistance = true;
+
+
+    [BoxGroup("MOVE BY DISTANCE")] public bool toMoveByDistance;
+    [BoxGroup("MOVE BY DISTANCE"), ShowIf("toMoveByDistance")]
     public float MoveBC = 0f; // DistanceBottomClamp 
+    [ShowIf("toMoveByDistance"), BoxGroup("MOVE BY DISTANCE")]
     public float MoveTC = 10f; // DistanceTopClamp
-    [Header("ROTATION")]
-    public bool toRotateByDistance = true;
+
+
+    [BoxGroup("ROTATION")]
+    public bool toRotateByDistance;
+    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
+    public bool isClockwise = false;
+    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")] 
     public float RotateBC = 0f; // RotateBottomClamp
+    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
     public float RotateTC = 10f; // RotateTopClamp
+    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")] 
     public float RotateMin = 0f; // RotateTopClamp
+    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")] 
     public float RotateMax = 180f; // RotateTopClamp
-    [Header("MOVE BY PERCENT")]
+
+
+    [BoxGroup("MOVE BY PERCENT")]
     public bool toMoveByPercent = false;
-    [Range(0, 2)] public float PercentClamp = 1f;
-    //public bool Loop = false;
-    [Header("100%")]
+    [BoxGroup("MOVE BY PERCENT"), ShowIf("toMoveByPercent")] [Range(0, 2)] public float PercentClamp = 1f;
+
+
+    [BoxGroup("100%")]
     public bool EndAction = false;
+    [BoxGroup("100%"), ShowIf("EndAction")]
     public float DestroyDelay = 1.5f;
 
 
-    readonly List<Vector2> _line = new();
-    readonly List<float> _lineDistances = new();
+    private LineRenderer _timeLR;
+    readonly List<Vector3> _linePoints = new();
+
     private int _numberOfVertices;
-    float _lineLength;
-
-    private float _percentPassed;
     private float _distancePassed;
-
 
     private void Start()
     {
         if (!toMoveByDistance && !toMoveByPercent) return;
-
+        
         SetUp();
-        CalculateLineLength();
-        _lineLength = _lineDistances[^1];
-
     }
     private void SetUp()
     {
-        _lineRenderer = GetComponent<LineRenderer>();
+        _timeLR = GetComponent<LineRenderer>();
 
-        _numberOfVertices = _lineRenderer.positionCount;
+        _numberOfVertices = _timeLR.positionCount;
 
         for (int i = 0; i < _numberOfVertices; i++)
         {
-            _line.Add(_lineRenderer.GetPosition(i));
+            _linePoints.Add(_timeLR.GetPosition(i));
         }
 
     }
+
+
     private void Update()
     {
-        _distancePassed = _timeLine.ÑurrentLength;
+        if (!toMoveByDistance && !toMoveByPercent && !toRotateByDistance) return;
 
+
+        _distancePassed = _timeLine.ÑurrentLength;
 
         if (toMoveByDistance)
         {
@@ -68,7 +80,6 @@ public class MovingTransform : MonoBehaviour
         {
             MoveByPercent();
         }
-        //else return;
 
         if (toRotateByDistance)
         {
@@ -81,11 +92,11 @@ public class MovingTransform : MonoBehaviour
     {
         if (MoveBC > _distancePassed)
         {
-            transform.position = _line[0];
+            transform.position = _linePoints[0];
         }
         else if (_distancePassed > MoveTC)
         {
-            transform.position = _line[^1];
+            transform.position = _linePoints[^1];
 
             if (EndAction)
             {
@@ -94,14 +105,14 @@ public class MovingTransform : MonoBehaviour
         }
         else if (MoveBC < _distancePassed && _distancePassed < MoveTC)
         {
-            float clamp = MoveTC - MoveBC;
-            _percentPassed = Mathf.Clamp((_distancePassed % MoveTC - MoveBC) / clamp, 0, 1);
+            //float clamp = MoveTC - MoveBC;
+            //_percentPassed = Mathf.Clamp((_distancePassed % MoveTC - MoveBC) / clamp, 0, 1);
             transform.position = PositionByPercent();
         }
     }
     void MoveByPercent()
     {
-        _percentPassed = Mathf.Clamp(_timeLine.PercentPassed / PercentClamp, 0.01f, 1);
+        //_percentPassed = Mathf.Clamp(_timeLine.PercentPassed / PercentClamp, 0.01f, 1);
         transform.position = PositionByPercent();
     }
 
@@ -109,55 +120,24 @@ public class MovingTransform : MonoBehaviour
     {
         float rotationValue;
         float distanceValue = Mathf.Clamp(_distancePassed, RotateBC, RotateTC);
+        rotationValue = Mathf.Lerp(RotateMin, RotateMax, (distanceValue - RotateBC) / (RotateTC - RotateBC));
+        Vector3 targetRotation;
+        if (isClockwise)
+        {
+            targetRotation = new(0f, 0f, -rotationValue);
+        }
+        else
+        {
+            targetRotation = new(0f, 0f, rotationValue);
+        }
 
-        rotationValue = Mathf.Lerp(RotateMin, RotateMax, distanceValue / (RotateTC - RotateBC));
-
-        Vector3 targetRotation = new (0f, 0f, rotationValue);
         transform.rotation = Quaternion.Euler(targetRotation);
     }
+
+
     Vector2 PositionByPercent()
     {
-
-        Vector2 position = Vector2.zero;
-
-        float percentLength = _percentPassed * _lineLength;
-
-        for (int i = 1; i < _numberOfVertices; i++)
-        {
-            float currDist = _lineDistances[i];
-
-            if (percentLength <= currDist)
-            {
-                float prevDist = _lineDistances[i - 1];
-                float fraction = (percentLength - prevDist) / (currDist - prevDist);
-
-                float startX = _line[i - 1].x;
-                float startY = _line[i - 1].y;
-                float endX = _line[i].x;
-                float endY = _line[i].y;
-
-                position = new Vector2(startX + fraction * (endX - startX), startY + fraction * (endY - startY));
-                break;
-            }
-        }
-
-
-
-        return position;
-    }
-
-
-    private void CalculateLineLength()
-    {
-        float length = 0f;
-        _lineDistances.Add(length);
-        for (int i = 0; i < _numberOfVertices - 1; i++)
-        {
-            Vector3 segmentStart = _line[i];
-            Vector3 segmentEnd = _line[i + 1];
-            length += Vector3.Distance(segmentStart, segmentEnd);
-            _lineDistances.Add(length);
-        }
+        return My.Line.FindPointByLength(_linePoints, _distancePassed);
     }
 }
 

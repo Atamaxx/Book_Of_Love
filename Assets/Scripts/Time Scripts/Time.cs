@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using NaughtyAttributes;
 
 namespace BookOf
 {
@@ -14,6 +15,7 @@ namespace BookOf
         public Color DisableColor;
         [SerializeField] private float _scrollCooldown = 0.2f;
 
+        [HorizontalLine]
         [Header("- setting points")]
         public bool CanSetPoints = false;
         public int MaxNumberOfPoints = 3;
@@ -21,7 +23,8 @@ namespace BookOf
         public int ActivePointNum = 0;
         public Transform PointPrefab;
 
-[Header("RESULTS")]
+        [HorizontalLine]
+        [Header("RESULTS")]
         public float ÑurrentLength;
         public float PercentPassed;
         public Vector3 TimePoint;
@@ -30,7 +33,7 @@ namespace BookOf
         [SerializeField] private List<TimeLine> _timeLines = new();
         [SerializeField] private string sceneName;
 
-        [Header("MUSIC")]
+        //[Header("MUSIC")]
 
 
 
@@ -132,7 +135,7 @@ namespace BookOf
 
         private void SetPoint()
         {
-            if (InputManager.LeftMouseButtonDown && CanSetPoints)
+            if (InputManager.Space && CanSetPoints)
             {
                 int numberOfPoints = SetPoints.Count;
                 if (numberOfPoints >= MaxNumberOfPoints)

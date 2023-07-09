@@ -34,7 +34,7 @@ public class CanvasDraw : MonoBehaviour
         GameObject point = new();
         point.transform.SetParent(canvas.transform);
         RectTransform rectTransform = point.AddComponent<RectTransform>();
-        rectTransform.anchoredPosition = Info.PlayerPosition; // Assuming the player.Position is a Vector2
+        //rectTransform.anchoredPosition = Info.PlayerPosition; // Assuming the player.Position is a Vector2
         rectTransform.sizeDelta = PointSize; // Set the size of the point
 
         // You can also add an Image component to the point object to make it visible

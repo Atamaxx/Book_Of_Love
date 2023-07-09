@@ -102,27 +102,10 @@ public class MoveObjectToCursor : MonoBehaviour
     Vector2 cirlceCenter;
     bool CircleHit()
     {
-        //Collider2D[] hitColliders = new Collider2D[4];
-        // Calculate the direction from pointA to pointB
         Vector2 direction = (_moveTo - _objectPos).normalized;
 
-        // Calculate the point that is 1 unit away from pointA in the direction of pointB
         cirlceCenter = _objectPos + direction * cirlceOffset;
         Collider2D hitColliders = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
-
-        //cirlceCenter = _objectPos - direction * cirlceOffset;
-
-        //direction = new Vector2(-direction.y, direction.x);
-
-        //hitColliders[1] = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
-        //cirlceCenter = _objectPos + direction * cirlceOffset;
-        //cirlceCenters.Add(cirlceCenter);
-
-        //hitColliders[2] = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
-        //cirlceCenter = _objectPos - direction * cirlceOffset;
-        //cirlceCenters.Add(cirlceCenter);
-
-        //hitColliders[3] = Physics2D.OverlapCircle(cirlceCenter, radius, MovementLayer);
 
         if (hitColliders)
         {

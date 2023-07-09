@@ -338,10 +338,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeLine: {fileID: 352544061}
-  MoveByDistance: 1
-  DistanceBottomClamp: 60
-  DistanceTopClamp: 75
-  MoveByPercent: 0
+  toMoveByDistance: 1
+  MoveBC: 0
+  MoveTC: 10
+  toRotateByDistance: 0
+  RotateBC: 0
+  RotateTC: 10
+  RotateMin: 0
+  RotateMax: 180
+  toMoveByPercent: 0
   PercentClamp: 1
   EndAction: 0
   DestroyDelay: 1.5
@@ -2072,10 +2077,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeLine: {fileID: 352544061}
-  MoveByDistance: 1
-  DistanceBottomClamp: 75
-  DistanceTopClamp: 90
-  MoveByPercent: 0
+  toMoveByDistance: 1
+  MoveBC: 0
+  MoveTC: 10
+  toRotateByDistance: 0
+  RotateBC: 0
+  RotateTC: 10
+  RotateMin: 0
+  RotateMax: 180
+  toMoveByPercent: 0
   PercentClamp: 1
   EndAction: 0
   DestroyDelay: 1.5
@@ -2596,10 +2606,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeLine: {fileID: 352544061}
-  MoveByDistance: 1
-  DistanceBottomClamp: 100
-  DistanceTopClamp: 105
-  MoveByPercent: 0
+  toMoveByDistance: 1
+  MoveBC: 0
+  MoveTC: 10
+  toRotateByDistance: 0
+  RotateBC: 0
+  RotateTC: 10
+  RotateMin: 0
+  RotateMax: 180
+  toMoveByPercent: 0
   PercentClamp: 1
   EndAction: 0
   DestroyDelay: 1.5
@@ -3325,10 +3340,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timeLine: {fileID: 352544061}
-  MoveByDistance: 1
-  DistanceBottomClamp: 110
-  DistanceTopClamp: 115
-  MoveByPercent: 0
+  toMoveByDistance: 1
+  MoveBC: 0
+  MoveTC: 10
+  toRotateByDistance: 0
+  RotateBC: 0
+  RotateTC: 10
+  RotateMin: 0
+  RotateMax: 180
+  toMoveByPercent: 0
   PercentClamp: 1
   EndAction: 0
   DestroyDelay: 1.5

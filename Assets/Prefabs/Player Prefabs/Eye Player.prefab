@@ -286,8 +286,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8638611417130373757}
-  - component: {fileID: 2554029782989835847}
-  - component: {fileID: 3113037800370403468}
+  - component: {fileID: 4114461643819146630}
   - component: {fileID: 8638611417130373744}
   - component: {fileID: 8638611417130373756}
   m_Layer: 3
@@ -315,7 +314,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2554029782989835847
+--- !u!114 &4114461643819146630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,25 +323,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8638611417130373751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19a5b16e0f02bd48947e0e322363c52, type: 3}
+  m_Script: {fileID: 11500000, guid: 83ff51d0b4d7f8d4099157c60efb71fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3113037800370403468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8638611417130373751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b689e443812b87740b3ebbafe04cac55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Speed: 1
-  SpeedClamp: 1
-  Rotation: 0
-  IsCursorVisible: 1
+  DiagonalMoveLimiter: 0.9
+  MovementLimiter: 5
+  RunSpeed: 20
+  SprintMultiplier: 2
 --- !u!70 &8638611417130373744
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

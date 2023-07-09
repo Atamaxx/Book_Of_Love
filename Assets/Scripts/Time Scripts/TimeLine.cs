@@ -6,13 +6,11 @@ public class TimeLine : MonoBehaviour
     [Header("MAIN PROPERTIES")]
     [SerializeField] private bool activateX = true;
     [SerializeField] private bool activateY = false;
-    [SerializeField] private bool Closer = false;
-    [SerializeField] private float fuckDistance = 5f;
 
     [Header("SERIALIZE")]
     [SerializeField] private LineRenderer _lineRenderer;
-    [SerializeField] private Transform _playerTransform;
     public GameObject Tutututu;              // Object to make time point visiable
+    public Transform playerTransform;
 
     [Header("RESULTS")]
     public float LineLength;
@@ -35,6 +33,7 @@ public class TimeLine : MonoBehaviour
     private readonly List<Vector3> _baseLine = new();
     private readonly List<float> _lineCoord = new();
 
+    private Vector2 _playerPosition;
 
     #region Start
     private void Start()
@@ -47,6 +46,8 @@ public class TimeLine : MonoBehaviour
 
     private void SetUp()
     {
+        playerTransform = GameObject.FindGameObjectWithTag(Info.PlayerTag).transform;
+        _playerPosition = playerTransform.position;
         Tutututu = Instantiate(Tutututu, TimePoint, Quaternion.identity);
 
         _numberOfVertices = _lineRenderer.positionCount;
@@ -143,11 +144,13 @@ public class TimeLine : MonoBehaviour
     {
         if (!activateX && !activateY)
             return;
+        //_playerPosition = Info.PlayerPosition;
+        _playerPosition = playerTransform.position;
 
-        float playerPosForY = RotatePoint(_line[0], _playerTransform.position, angle).x;
+        float playerPosForY = RotatePoint(_line[0], _playerPosition, angle).x;
 
         if (activateX)
-            _playerCoord = _playerTransform.position.x;
+            _playerCoord = _playerPosition.x;
         else if (activateY)
             _playerCoord = playerPosForY;
 
@@ -358,6 +361,6 @@ public class TimeLine : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(_playerTransform.position, TimePoint);
+        Gizmos.DrawLine(_playerPosition, TimePoint);
     }
 }

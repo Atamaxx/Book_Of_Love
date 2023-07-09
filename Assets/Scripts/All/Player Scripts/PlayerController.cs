@@ -8,6 +8,6 @@ public class PlayerController : MonoBehaviour
         Vector3 currentPosition = transform.position;
 
         // Update the player's position in the PlayerPositionManager
-        Info.PlayerPosition = currentPosition;
+        //Info.PlayerPosition = currentPosition;
     }
 }

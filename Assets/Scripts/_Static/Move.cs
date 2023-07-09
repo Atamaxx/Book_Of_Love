@@ -47,7 +47,6 @@ namespace My
         }
         public static IEnumerator MoveObject(Transform ObjectToMove, Vector3 targetPosition, float moveSpeed)
         {
-            print(101);
             while (Vector2.Distance(ObjectToMove.position, targetPosition) > 1f)
             {
                 // Calculate the direction towards the target
