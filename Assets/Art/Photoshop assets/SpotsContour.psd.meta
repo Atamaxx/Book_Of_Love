@@ -1,0 +1,479 @@
+fileFormatVersion: 2
+guid: 4926ed53d6464cc4eba0a9fde2fd6523
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 1365
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SpotsContour_0
+      rect:
+        serializedVersion: 2
+        x: 6791
+        y: 3517
+        width: 3721
+        height: 3148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4c34432375d8f642a4d97813b7f6150
+      internalID: 523543257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpotsContour_28
+      rect:
+        serializedVersion: 2
+        x: 3703
+        y: 3938
+        width: 2875
+        height: 2628
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5419576d20c19d74796bdaab91c480f8
+      internalID: 1495170153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpotsContour_30
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 3518
+        width: 3332
+        height: 3031
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d48bdeca1fc258342a2ae70c3d5a4ce3
+      internalID: 499490177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpotsContour_94
+      rect:
+        serializedVersion: 2
+        x: 4046
+        y: 797
+        width: 2875
+        height: 2543
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc79e34e1ec19f14187196b16e70ff7f
+      internalID: 1785775454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpotsContour_101
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 1109
+        width: 2801
+        height: 2059
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 766faf7ce3f98344980976a540141822
+      internalID: 1725140780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpotsContour_115
+      rect:
+        serializedVersion: 2
+        x: 7570
+        y: 887
+        width: 2382
+        height: 1965
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 625e8f765b900da4da5a402278dc0c1a
+      internalID: 1778267021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      SpotsContour_167: 703797309
+      SpotsContour_153: 404517486
+      SpotsContour_138: -65274851
+      SpotsContour_134: -1300665500
+      SpotsContour_24: -1282208020
+      SpotsContour_180: -549732126
+      SpotsContour_79: -1907599696
+      SpotsContour_27: -1165406024
+      SpotsContour_77: -127312266
+      SpotsContour_95: -196546967
+      SpotsContour_94: 1785775454
+      SpotsContour_98: 2146413862
+      SpotsContour_64: -2091206238
+      SpotsContour_220: -2124570810
+      SpotsContour_19: 942578043
+      SpotsContour_219: 1428546078
+      SpotsContour_111: -402794167
+      SpotsContour_8: -609058655
+      SpotsContour_42: -8490999
+      SpotsContour_51: -1709116615
+      SpotsContour_90: 958479472
+      SpotsContour_169: -1616822094
+      SpotsContour_35: 2015961449
+      SpotsContour_100: -1857607648
+      SpotsContour_178: 621158529
+      SpotsContour_140: 289633503
+      SpotsContour_184: 201067100
+      SpotsContour_67: 1497989941
+      SpotsContour_14: -1426080853
+      SpotsContour_172: -590706262
+      SpotsContour_87: -478980232
+      SpotsContour_165: -1728277033
+      SpotsContour_173: 334600814
+      SpotsContour_211: -1493512674
+      SpotsContour_213: -1880545394
+      SpotsContour_121: -221800700
+      SpotsContour_80: -520739727
+      SpotsContour_20: 1684892325
+      SpotsContour_34: -701273087
+      SpotsContour_78: -1596932438
+      SpotsContour_174: 892527604
+      SpotsContour_3: 160234443
+      SpotsContour_155: -1217549015
+      SpotsContour_74: 892139686
+      SpotsContour_135: -2090598891
+      SpotsContour_5: -1724841121
+      SpotsContour_152: 1333191583
+      SpotsContour_144: 1225929141
+      SpotsContour_31: -89887700
+      SpotsContour_188: -1322142718
+      SpotsContour_15: 1141485184
+      SpotsContour_12: 1769205989
+      SpotsContour_195: -1055145469
+      SpotsContour_48: 1983014227
+      SpotsContour_65: -2106316770
+      SpotsContour_207: 508230666
+      SpotsContour_164: 1136820569
+      SpotsContour_126: -2086749570
+      SpotsContour_163: 493629193
+      SpotsContour_4: -910201262
+      SpotsContour_212: -57225765
+      SpotsContour_191: 1597471819
+      SpotsContour_53: -485215577
+      SpotsContour_40: -916054377
+      SpotsContour_115: 1778267021
+      SpotsContour_223: -849792891
+      SpotsContour_88: 1632830027
+      SpotsContour_69: 1304022063
+      SpotsContour_28: 1495170153
+      SpotsContour_9: -878493610
+      SpotsContour_227: -761781182
+      SpotsContour_71: 1676867977
+      SpotsContour_198: 1001348157
+      SpotsContour_57: -469488779
+      SpotsContour_183: 1615450229
+      SpotsContour_214: 1674140542
+      SpotsContour_170: -792229667
+      SpotsContour_6: -114908515
+      SpotsContour_120: 199665303
+      SpotsContour_62: -1855529850
+      SpotsContour_61: -108610586
+      SpotsContour_96: 1393036197
+      SpotsContour_52: -538853191
+      SpotsContour_179: 557029386
+      SpotsContour_224: -1019428098
+      SpotsContour_29: 1834373807
+      SpotsContour_22: -1476965176
+      SpotsContour_171: 683705799
+      SpotsContour_117: -1545373958
+      SpotsContour_154: -713333719
+      SpotsContour_156: -2101338037
+      SpotsContour_97: 143286698
+      SpotsContour_123: -1640758554
+      SpotsContour_149: 756869731
+      SpotsContour_83: 276451293
+      SpotsContour_106: 158778869
+      SpotsContour_93: 2036816489
+      SpotsContour_92: -530498414
+      SpotsContour_107: -220144006
+      SpotsContour_0: 523543257
+      SpotsContour_197: 2060472714
+      SpotsContour_209: -804277608
+      SpotsContour_199: -173013483
+      SpotsContour_228: 1943843007
+      SpotsContour_10: -470453367
+      SpotsContour_43: -12220050
+      SpotsContour_201: 447784688
+      SpotsContour_63: 1643938257
+      SpotsContour_89: 693545463
+      SpotsContour_221: -403268069
+      SpotsContour_54: 369979660
+      SpotsContour_181: 1001641084
+      SpotsContour_41: 451300841
+      SpotsContour_32: -154406664
+      SpotsContour_73: 1705860953
+      SpotsContour_122: 90763064
+      SpotsContour_60: -1842139877
+      SpotsContour_182: -1386272851
+      SpotsContour_222: -685891199
+      SpotsContour_1: -462999216
+      SpotsContour_104: 1633668746
+      SpotsContour_33: -2104180687
+      SpotsContour_136: -2094775836
+      SpotsContour_99: -246008771
+      SpotsContour_124: 2109274549
+      SpotsContour_114: 799206320
+      SpotsContour_166: -22151682
+      SpotsContour_56: -18093058
+      SpotsContour_196: -15098673
+      SpotsContour_217: 1221432786
+      SpotsContour_147: 509952009
+      SpotsContour_7: -254024858
+      SpotsContour_102: -933619850
+      SpotsContour_143: -284554157
+      SpotsContour_175: -1375527191
+      SpotsContour_70: 1856156604
+      SpotsContour_218: -638103118
+      SpotsContour_125: -611780858
+      SpotsContour_137: 156033053
+      SpotsContour_206: -2083303339
+      SpotsContour_176: -1384306196
+      SpotsContour_55: -962315288
+      SpotsContour_141: 1097438050
+      SpotsContour_132: -1247448117
+      SpotsContour_202: -1992758112
+      SpotsContour_226: 162424570
+      SpotsContour_160: -306132126
+      SpotsContour_127: 1895795433
+      SpotsContour_75: -1151103404
+      SpotsContour_177: -67300774
+      SpotsContour_185: 1765796281
+      SpotsContour_150: -467232529
+      SpotsContour_36: -1577431530
+      SpotsContour_157: -1992364330
+      SpotsContour_192: -844697901
+      SpotsContour_116: 684694974
+      SpotsContour_145: -267498667
+      SpotsContour_168: -1127849710
+      SpotsContour_205: 1133682805
+      SpotsContour_210: 685588850
+      SpotsContour_161: -1467011066
+      SpotsContour_162: -110896118
+      SpotsContour_193: -1036569052
+      SpotsContour_66: 2123796236
+      SpotsContour_91: -480730958
+      SpotsContour_17: -1619858271
+      SpotsContour_72: -1925277735
+      SpotsContour_18: 1225286472
+      SpotsContour_45: -64791400
+      SpotsContour_118: 692174845
+      SpotsContour_30: 499490177
+      SpotsContour_25: -1318699671
+      SpotsContour_21: -665887647
+      SpotsContour_44: 1800699751
+      SpotsContour_26: -511504870
+      SpotsContour_139: -1588238492
+      SpotsContour_2: 1613641233
+      SpotsContour_49: 265558774
+      SpotsContour_82: -190828968
+      SpotsContour_68: 1285264479
+      SpotsContour_23: 1621586159
+      SpotsContour_85: -74402790
+      SpotsContour_109: -1813382917
+      SpotsContour_216: -1533592843
+      SpotsContour_46: 469714519
+      SpotsContour_37: -187000840
+      SpotsContour_105: 1278541937
+      SpotsContour_59: -554433449
+      SpotsContour_81: 938655595
+      SpotsContour_186: -207419239
+      SpotsContour_146: 415216902
+      SpotsContour_215: -569875677
+      SpotsContour_101: 1725140780
+      SpotsContour_113: -1780984453
+      SpotsContour_86: -910555894
+      SpotsContour_158: 133661888
+      SpotsContour_194: -1622562223
+      SpotsContour_225: -1672127984
+      SpotsContour_148: 428566042
+      SpotsContour_142: 103843258
+      SpotsContour_11: 1678448756
+      SpotsContour_108: -647157920
+      SpotsContour_76: 541078302
+      SpotsContour_84: 1722773188
+      SpotsContour_110: 569420280
+      SpotsContour_47: -944520508
+      SpotsContour_200: -2147291362
+      SpotsContour_16: -278856110
+      SpotsContour_103: 1095532936
+      SpotsContour_13: 345788696
+      SpotsContour_189: 1849568707
+      SpotsContour_128: 638806335
+      SpotsContour_190: 1780704367
+      SpotsContour_151: 503627243
+      SpotsContour_119: 1047758609
+      SpotsContour_229: 2087143502
+      SpotsContour_38: 1429990258
+      SpotsContour_187: -23479549
+      SpotsContour_130: 930708134
+      SpotsContour_133: -1189773253
+      SpotsContour_112: 947783994
+      SpotsContour_159: -1535118581
+      SpotsContour_50: -513833764
+      SpotsContour_131: 451859837
+      SpotsContour_203: -659973191
+      SpotsContour_204: -892104143
+      SpotsContour_58: -1729039280
+      SpotsContour_208: -1109495059
+      SpotsContour_39: -1001472415
+      SpotsContour_129: 645475075
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
