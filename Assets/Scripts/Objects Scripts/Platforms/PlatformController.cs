@@ -1,10 +1,11 @@
-#if UNITY_EDITOR
-#endif
-using NaughtyAttributes;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
-public class MovingPlatform : MonoBehaviour
+#if UNITY_EDITOR
+using NaughtyAttributes;
+#endif
+
+public class PlatformController : MonoBehaviour
 {
     [SerializeField] private BookOf.Time _timeLine;
     public List<GameObject> Waypoints = new();
@@ -12,61 +13,40 @@ public class MovingPlatform : MonoBehaviour
     public Sprite WaypointSprite;
     public Color previewColor;
 
-
-    ///
-    [BoxGroup("CONSTANT MOVEMENT")] public bool toConstantMove;
-    [BoxGroup("CONSTANT MOVEMENT"), ShowIf("toConstantMove")]
-    public float Speed = 25f;
-    ///
-    [BoxGroup("MOVE BY DISTANCE"), OnValueChanged("OnMove")] public bool toMoveByDistance;
-
-    void OnMove() { toLoop = false; }
-
-    [BoxGroup("MOVE BY DISTANCE"), ShowIf("toMoveByDistance")]
-    public float MoveBC = 0f; // DistanceBottomClamp 
-    [BoxGroup("MOVE BY DISTANCE"), ShowIf("toMoveByDistance")]
-    public float MoveTC = 10f; // DistanceTopClamp
-
-    ///
-    [BoxGroup("LOOP"), ShowIf("toMoveByDistance")] public bool toLoop; //OnValueChanged("OnLoop")
-                                                                       //[BoxGroup("LOOP"), ShowIf("toLoop")]
-                                                                       // public float LoopBC = 0f; 
-    [BoxGroup("LOOP"), ShowIf("toLoop")]
-    public float RepeatEach = 10f;
-    //   [BoxGroup("LOOP"), ShowIf("toLoop")]
-    //public float LoopTC = 50f;
-    //
-    [BoxGroup("ROTATION")]
-    public bool toRotateByDistance;
-    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
-    public bool isClockwise = false;
-    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
-    public float RotateBC = 0f; // RotateBottomClamp
-    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
-    public float RotateTC = 10f; // RotateTopClamp
-    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
-    public float RotateMin = 0f; // RotateTopClamp
-    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
-    public float RotateMax = 180f; // RotateTopClamp
-
-    //
-    [BoxGroup("100%")]
-    public bool EndAction = false;
-    [BoxGroup("100%"), ShowIf("EndAction")]
-    public float DestroyDelay = 1.5f;
-
-
-    private int waypointIndex = 0;
+    #region Privare Variables
+    private float _timeDistance;
+    private int _waypointIndex = 0;
     private int _numberOfPoints = 0;
     private readonly List<Vector3> _waypoints = new();
-    private float _timeDistance;
-    private float _platformDist;
-    private float _platformPercent;
     private float _wayLength;
+    #endregion
+
+    #region Transformations
+    [BoxGroup("MOVE BY DISTANCE")] public bool toMoveByDistance;
+    [BoxGroup("MOVE BY DISTANCE"), ShowIf("toMoveByDistance")]
+    public MovingPlatform movingPlatform;
+
+    [BoxGroup("CONSTANT MOVEMENT")] public bool toConstantMove;
+    [BoxGroup("CONSTANT MOVEMENT"), ShowIf("toConstantMove")]
+    public ConstantMovement constantMovement;
+
+    [BoxGroup("ROTATION")] public bool toRotateByDistance;
+    [BoxGroup("ROTATION"), ShowIf("toRotateByDistance")]
+    public RotatingPlatform rotatingPlatform;
+
+    [BoxGroup("OVERLAPPING")] public bool toOverlap;
+    [BoxGroup("OVERLAPPING"), ShowIf("toOverlap")]
+    public Overlapping overlapping;
+
+    [BoxGroup("100%")] public bool EndAction = false;
+    [BoxGroup("100%"), ShowIf("EndAction")]
+    public float DestroyDelay = 1.5f;
+    #endregion
 
     private void Start()
     {
-        //if (!toMoveByDistance && !toMoveByPercent) return;
+        AddScripts();
+
         g_platformBounds = GetComponent<BoxCollider2D>().bounds;
         _numberOfPoints = Waypoints.Count;
 
@@ -75,7 +55,7 @@ public class MovingPlatform : MonoBehaviour
             _waypoints.Add(Waypoints[i].transform.position);
         }
 
-        if (toLoop)
+        if (movingPlatform != null && movingPlatform.toLoop)
         {
             _waypoints.Add(Waypoints[0].transform.position);
         }
@@ -83,99 +63,55 @@ public class MovingPlatform : MonoBehaviour
         _wayLength = My.Line.CalculateLength(_waypoints);
     }
 
-    //private void OnLoop()
-    //{
-    //    if (toLoop)
-    //    {
-    //        _waypoints.Add(Waypoints[0].transform.position);
-    //    }
-    //    else
-    //    {
-    //        _waypoints.RemoveAt(_waypoints.Count - 1);
-    //    }
-    //}
+    private void AddScripts()
+    {
+        if (toMoveByDistance)
+        {
+            movingPlatform = GetComponent<MovingPlatform>();
+        }
+        else if (toConstantMove)
+        {
+            constantMovement = GetComponent<ConstantMovement>();
+        }
 
+        if (toRotateByDistance)
+        {
+            rotatingPlatform = GetComponent<RotatingPlatform>();
+        }
+
+        if (toOverlap)
+        {
+            overlapping = GetComponent<Overlapping>();
+        }
+    }
 
     void Update()
     {
         _timeDistance = _timeLine.ÑurrentLength;
 
-
-        if (toConstantMove)
-            My.Transformations.MoveConstant(Waypoints, ref waypointIndex, transform, Speed);
-        else if (toMoveByDistance)
+        if (toOverlap && overlapping.IsOverlaping)
         {
-            if (toLoop)
-            {
-                MoveDistanceLoop();
+            toConstantMove = true;
+        }
+        else toConstantMove = false;
 
-            }
-            else
-                MoveDistance();
+        if (toMoveByDistance)
+        {
+            movingPlatform.MoveByDistance(_waypoints, _timeDistance, _wayLength);
+        }
+        else if (toConstantMove)
+        {
+            constantMovement.ConstantMove(_waypoints, ref _waypointIndex);
         }
 
         if (toRotateByDistance)
         {
-            RotateByDistance();
+            rotatingPlatform.RotateByDistance(_timeDistance);
         }
+
+        
     }
 
-    void MoveDistance()
-    {
-        if (_timeDistance <= MoveBC)
-            transform.position = _waypoints[0];
-        else if (_timeDistance >= MoveTC)
-            transform.position = _waypoints[^1];
-        else if (MoveBC < _timeDistance && _timeDistance < MoveTC)
-        {
-            _platformPercent = Mathf.Clamp((_timeDistance % MoveTC - MoveBC) / (MoveTC - MoveBC), 0, 1);
-
-            _platformDist = _platformPercent * _wayLength;
-            transform.position = PositionByPercent();
-        }
-    }
-
-    void MoveDistanceLoop()
-    {
-        if (_timeDistance <= MoveBC)
-        {
-            transform.position = _waypoints[0];
-            return;
-        }
-        else if (MoveTC <= _timeDistance)
-        {
-            _platformPercent = Mathf.Clamp((MoveTC - MoveBC) % RepeatEach / RepeatEach, 0, 1);
-            _platformDist = _platformPercent * _wayLength;
-        }
-        else if (MoveBC < _timeDistance && _timeDistance < MoveTC)
-        {
-            _platformPercent = Mathf.Clamp((_timeDistance - MoveBC) % RepeatEach / RepeatEach, 0, 1);
-            _platformDist = _platformPercent * _wayLength;
-        }
-        transform.position = PositionByPercent();
-    }
-
-    void RotateByDistance()
-    {
-        float rotationValue;
-        float distanceValue = Mathf.Clamp(_timeDistance, RotateBC, RotateTC);
-        rotationValue = Mathf.Lerp(RotateMin, RotateMax, (distanceValue - RotateBC) / (RotateTC - RotateBC));
-        Vector3 targetRotation;
-
-        if (isClockwise)
-            rotationValue = -rotationValue;
-
-        g_angle = rotationValue;
-
-        targetRotation = new(0f, 0f, rotationValue);
-
-        transform.rotation = Quaternion.Euler(targetRotation);
-    }
-
-    Vector2 PositionByPercent()
-    {
-        return My.Line.FindPointByLength(_waypoints, _platformDist);
-    }
 
     #region Editor
 
@@ -193,7 +129,16 @@ public class MovingPlatform : MonoBehaviour
         waypoint.transform.position = transform.position;
         Waypoints.Add(waypoint);
     }
-
+    [Button("Add Parent's Waypoints")]
+    private void AddParentWaypoints()
+    {
+        if (WaypointParent == null) return;
+        for (int i = 0; i < WaypointParent.transform.childCount; i++)
+        {
+            Transform child = WaypointParent.transform.GetChild(i);
+            Waypoints.Add(child.gameObject);
+        }
+    }
     [Button]
     private void DeleteLastWaypoint()
     {
@@ -235,7 +180,8 @@ public class MovingPlatform : MonoBehaviour
             {
                 if (Waypoints[i] != null)
                 {
-                    g_platformBounds = GetComponent<BoxCollider2D>().bounds;
+                    if (rotatingPlatform != null) g_angle = rotatingPlatform.g_angle;
+                    else g_platformBounds = GetComponent<BoxCollider2D>().bounds;
 
                     // Draw a line between Waypoints
                     if (i < Waypoints.Count - 1 && Waypoints[i + 1] != null)
