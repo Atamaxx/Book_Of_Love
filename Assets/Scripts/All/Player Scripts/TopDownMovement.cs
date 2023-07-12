@@ -11,6 +11,7 @@ public class TopDownMovement : MonoBehaviour
     [Range(0, 15)] public float MovementLimiter = 5f;
     public float RunSpeed = 20.0f;
     public float SprintMultiplier = 2;
+    public float DecelerationMultiplier = 3;
 
     void Start()
     {
@@ -43,13 +44,10 @@ public class TopDownMovement : MonoBehaviour
     {
         if (Input.GetButton("Sprint"))
             _rigidbody2D.velocity = new Vector2(_horizontalInput * RunSpeed * SprintMultiplier, _verticalInput * RunSpeed * SprintMultiplier);
+        else if (Input.GetButton("Deceleration"))
+            _rigidbody2D.velocity = new Vector2(_horizontalInput * RunSpeed / DecelerationMultiplier, _verticalInput * RunSpeed / DecelerationMultiplier);
         else
             _rigidbody2D.velocity = new Vector2(_horizontalInput * RunSpeed, _verticalInput * RunSpeed);
-
-
-
-
-
     }
 
     

@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -63,6 +64,33 @@ public class LRDisplayValues : MonoBehaviour
         if (_line.positionCount == 0) return;
         _line.positionCount--;
     }
+
+    [Button("Swap Order")]
+    void SwapLinePoints()
+    {
+        int positionCount = _line.positionCount;
+        List<Vector3> positions = new (positionCount);
+
+        // get the current points
+        for (int i = 0; i < positionCount; i++)
+        {
+            positions.Add(_line.GetPosition(i));
+        }
+
+        // clear the _line
+        _line.positionCount = 0;
+
+        // reassign the points in the opposite order
+        for (int i = positions.Count - 1; i >= 0; i--)
+        {
+            _line.positionCount++;
+            _line.SetPosition(_line.positionCount - 1, positions[i]);
+        }
+    }
+
+
+
+
     [Button("Set Z to 0")]
     private void Zto0()
     {
